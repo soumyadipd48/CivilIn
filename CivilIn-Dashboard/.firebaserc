@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "civilin-aa26d": {
+      "hosting": {
+        "routing-test": [
+          "civilin-aa26d"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "civilin-aa26d"
+  }
+}

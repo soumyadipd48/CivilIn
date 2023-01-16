@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivilIn-assistance-list</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <div class="d-flex justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem; margin-top: 400px;" role="status" *ngIf="loader">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-image" *ngIf="!loader">
+        <app-navbar></app-navbar>
+        <section class='section_gradient' id='section_gradient'>
+            <div class="header_fixed_ass">
+
+                <div style="display: inline-block; width: 100%; padding-top: 30px;">
+                    <div class="search_control">
+                        <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+                            placeholder="Start searching...">
+                    </div>
+                    <div class="dropdown_select">
+                        <select [(ngModel)]="selectedHead" (change)="valueSelected()" class="dropdown_select_ass">
+                            <option>All</option>
+                            <option>Pending</option>
+                            <option>Assigned</option>
+                            <option>In Progress</option>
+                            <option>Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <ng-template #template id="template">
+                <section class="step-wizard-new">
+                    <div class="clearfix">
+                        <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Assign Assistance : {{ modalAssistance }}</h5>
+                        <!-- <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button> -->
+                    </div>
+                    <form action="#">
+                        <label for="GRP-names" style="margin-left: 10px;">Choose a GRP to assign: </label><br>
+                        <select name="GRP-names" id="GRP-names" style="margin-left: 10px;" [(ngModel)]="selectedGRP">
+                            <option value="HWH-GRP">HWH-GRP</option>
+                            <option value="KGP-GRP">KGP-GRP</option>
+                            <option value="SIL-GRP">SIL-GRP</option>
+                        </select><br>
+
+                        <label for="Priority-names" style="margin-left: 10px;">Choose priority: </label><br>
+                        <select name="Priority-names" id="Priority-names" style="margin-left: 10px;" [(ngModel)]="selectedPriority">
+                            <option value="Critical">Critical</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select><br>
+                        <label for="remarks" style="margin-left: 10px;">Remarks(if Any): </label><br><br>
+                        <textarea id="remarks" name="remarks" rows="4" cols="50" style="margin-left: 10px; padding: 10px;" placeholder="Type your remarks.." [(ngModel)]="selectedRemarks"></textarea><br><br>
+                        <input type="submit" value="Submit" class="btn btn-primary float-start" (click)="updateAssistance()" style="padding: 5px; margin-bottom: 5px; margin-left: 5px;"/>
+                        <button type="button" class="btn btn-primary float-end" (click)="modalRef.hide()" style="padding: 5px; margin-bottom: 5px; margin-right: 5px;">
+                            Close
+                        </button>
+                    </form>
+                </section>
+                </ng-template>
+
+                <ng-template #template_progress_new id="template_progress_new">
+                    <section class="step-wizard">
+                        <div class="clearfix">
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Assistance Id: {{ modalAssistance_progress_unId }}</h5>
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Status of Assistance : {{ modalAssistance_progress_status }}</h5>
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Priority of Assistance : {{ modalAssistance_progress_priority }}</h5>
+                            <!-- <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button> -->
+                        </div><br>
+
+                        <!-- step progress bar new code-->
+
+                        <div class="progress_bar">
+                            <span *ngFor="let item of counts; let i = index">
+                              <span class="circles" [class.active]="orderStatus == item"></span>
+                              <span class="bar" *ngIf="(i != counts.length-1)"></span>
+                            </span>
+                        </div>
+
+                        <div style="margin-left: 55px;">
+                            <div class="display_desc" *ngFor="let item of counts">
+                                <span [class.circle-desc-active]="orderStatus == item">{{ item }}</span>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" (click)="modalRef.hide()" style="padding: 5px; margin-top: 40px; margin-bottom: 5px; margin-left: 225px;">
+                            Close
+                        </button>
+                    </section>
+                </ng-template>
+    
+                <div style=" height: 450px; overflow: auto;">
+                    <table class="freeze-table" style="width:94%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('assUnId')" style="min-width: 75px; width: 75px; text-align: center;"
+                                    class="col-id-no fixed-header">Request Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('assName')" style="min-width: 100px; width:100px; text-align: center;"
+                                    class="col-first-name fixed-header">User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('assHead')" style="min-width: 120px; width:120px; text-align: center;">
+                                    Assistance Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 280px; width:280px; text-align: center;">Remarks</th>
+                                <th (click)="sort('station')" style="min-width: 100px; width:100px; text-align: center;">
+                                    Station&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let assistance of selectedAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:5,currentPage:p};">
+                                <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
+                                <td style="text-align: center;">{{ assistance.assHead }}</td>
+                                <td style="text-align: center;">{{ assistance.assRemarks }}</td>
+                                <td style="text-align: center;">{{ assistance.station }}</td>
+                                <td style="text-align: center;">{{ assistance.timestamp }}</td>
+                                <td style="text-align: center;">{{ assistance.status }}</td>
+                                <td *ngIf="assistance.status === 'Pending' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal(template, assistance)">Assign</button></td>
+                                <td *ngIf="assistance.status !== 'Pending' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedAssistance?.length === 0" style="margin-left: 600px; margin-top: 100px;">No Records
+                        Found</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</body>
+
+</html>
