@@ -125,13 +125,13 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:5,currentPage:p};">
+                                *ngFor="let assistance of selectedAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:10,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
                                 <td style="text-align: center;">{{ assistance.assRemarks }}</td>
                                 <td style="text-align: center;">{{ assistance.station }}</td>
-                                <td style="text-align: center;">{{ assistance.timestamp }}</td>
+                                <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
                                 <td style="text-align: center;">{{ assistance.status }}</td>
                                 <td *ngIf="assistance.status === 'Pending' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal(template, assistance)">Assign</button></td>
                                 <td *ngIf="assistance.status !== 'Pending' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>

@@ -1,7 +1,7 @@
 export class Complaint {
     key?: string | null;
     complaintBrief? : string;
-    complaintByname? : string;
+    complaintByName? : string;
     complaintByPhone? : string;
     complaintFor? : string;
     complaintHead? : string;
@@ -11,8 +11,13 @@ export class Complaint {
     lat? : number;
     lng? : number;
     status? : string;
+    stn_details? : number | null;
+    stn_details_name? : string;
     timestamp?: number;
-    trainPnr? : number;
+    // trainPnr? : number;
+    trainPnr? : string;
+    stn_starting? : string;
+    stn_ending? : string;
     trainType? : string;
     type? : string;
     userId? : string;

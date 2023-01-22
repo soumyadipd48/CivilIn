@@ -181,6 +181,7 @@ td {
   border: none;
   outline-offset: -1px;
   padding-left: 5px;
+  padding-right: 5px;
 }
 
 tr {

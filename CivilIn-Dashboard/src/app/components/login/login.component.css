@@ -32,30 +32,34 @@ body {
   .login .msg {
     text-align: center;
   }
-  .login .form input[type=text].text {
+  /* .login .form input[type=text].text {
     border: none;
     background: none;
     box-shadow: 0px 2px 0px 0px white;
-    width: 100%;
-    color: white;
     font-size: 1em;
     outline: none;
-  }
+    height: 30px;
+    width: 100%;
+    color: black;
+    border-radius: 10px;
+    padding-left: 10px;
+  } */
   .login .form .text::placeholder {
     color: #D3D3D3;
   }
-  .login .form input[type=password].password {
+  /* .login .form input[type=password].password {
     border: none;
-    background: none;
     box-shadow: 0px 2px 0px 0px white;
+    height: 30px;
     width: 100%;
-    color: white;
+    color: black;
     font-size: 1em;
     outline: none;
     margin-bottom: 20px;
     margin-top: 20px;
+    border-radius: 6px;
     padding-left: 10px;
-  }
+  } */
   .login .form .password::placeholder {
     color: #D3D3D3;
   }
@@ -97,4 +101,24 @@ body {
   footer .heart {
     color: #B22222;
     font-size: 1.5em
+  }
+
+  form i {
+    margin-left: -30px;
+    cursor: pointer;
+    color: black;
+  }
+
+  .login .form input {
+    border: none;
+    box-shadow: 0px 2px 0px 0px white;
+    height: 40px;
+    width: 100%;
+    color: black;
+    font-size: 1em;
+    outline: none;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-radius: 6px;
+    padding-left: 10px;
   }

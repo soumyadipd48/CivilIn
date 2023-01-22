@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Login</title>
   <!--<link href="https://fonts.googleapis.com/css?family=Assistant:400,700" rel="stylesheet"><link rel="stylesheet" href="./style.css">-->
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -15,13 +15,16 @@
   <p class='msg'>Welcome back</p>
   <div class='form'>
     <form>
-  <input type="email" placeholder='email' class='form-control' id='email' #userEmail required><br>
-  <input type="password" placeholder='••••••••••••••' class='password' #userPassword required><br>
+      <input type="email" placeholder='email' class='form-control' id='email' #userEmail required><br>
+      <div>
+        <input [type]="changeType?'password':'text'" placeholder='••••••••••••••' #userPassword required>
+        <span class="eyeicon" (click)="viewpass()"><i [ngClass]="visible?'fa fa-eye':'fa fa-eye-slash'"></i></span>
+      </div><br>
 
-  <button type="button" class="btn btn-info" (click)="authService.SignIn(userEmail.value, userPassword.value)">Login</button>
-  <!-- <button type="button" class="btn btn-info">Login</button> -->
-  <!-- <button type="button" class="btn btn-info" style="margin-left: 10px" (click)="btnClick();">Forget Password</button> -->
-  <!-- <button type="button" class="btn btn-info" style="margin-left: 10px">Forget Password</button> -->
+      <button type="button" class="btn btn-info" (click)="authService.SignIn(userEmail.value, userPassword.value)">Login</button>
+      <!-- <button type="button" class="btn btn-info">Login</button> -->
+      <!-- <button type="button" class="btn btn-info" style="margin-left: 10px" (click)="btnClick();">Forget Password</button> -->
+      <!-- <button type="button" class="btn btn-info" style="margin-left: 10px">Forget Password</button> -->
     </form>
   </div>
 </section>
@@ -30,7 +33,19 @@
   <!--<p>Gradient: <a href='https://uigradients.com/#Turquoiseflow'>https://uigradients.com/#Turquoiseflow</a></p>-->
 </footer>
 <!-- partial -->
-  <script  src="./script.js"></script>
+  <script>
+        const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#password");
+
+        togglePassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            
+            // toggle the icon
+            this.classList.toggle("bi-eye");
+        });
+  </script>
 
 </body>
 </html>

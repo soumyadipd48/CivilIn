@@ -33,7 +33,7 @@
                     <option>In Progress</option>
                 </select> -->
 
-                <div style="display: inline-block; width: 100%; padding-top: 30px;">
+                <div style="display: inline-block; width: 100%">
                     <div class="search_control">
                         <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
                             placeholder="Start searching...">
@@ -114,36 +114,40 @@
                         </section>
                     </ng-template>
     
-                <div style="width: 1800px; height: 450px; overflow: auto;">
-                    <table class="freeze-table" width="1280px" id="myTable">
+                <div style="width: 100%; height: 92%; overflow: auto;">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
                         <thead>
                             <tr>
                                 <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
                                     Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
                                 <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
                                     User Name&nbsp;<i class="fa fa-sort"></i></th>
-                                <th (click)="sort('complaintHead')" style="min-width: 100px; width:100px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
-                                <th (click)="sort('complaintType')" style="min-width: 100px; width:100px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
                                 <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
-                                <th (click)="sort('trainType')" style="min-width: 100px; width:100px; text-align: center;">Train Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
                                 <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
-                                <th (click)="sort('userPhone')" style="min-width: 75px; width: 75px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
                                 <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
                                 <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:5,currentPage:p};">
-                                <td class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId}}</td>
-                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.userName}}</td>
-                                <td style="text-align: center;">{{ complaint.complaintHead }}</td>
-                                <td style="text-align: center;">{{ complaint.complaintType }}</td>
-                                <!-- <td style="text-align: center;">{{ complaint.complaintBrief }}</td> -->
-                                <td style="text-align: center;">{{ complaint.trainType }}</td>
-                                <td style="text-align: center;">{{ complaint.lat }} | {{ complaint.lng }}</td>
-                                <td style="text-align: center;">{{ complaint.userPhone }}</td>
+                            <tr *ngFor="let complaint of selectedComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:7,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}">{{ complaint.trainPnr }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
                                 <td style="text-align: center;">{{ complaint.status }}</td>
-                                <!-- <td style="text-align: center;"><button type="submit">Assign</button></td> -->
                                 <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal(template, complaint)">Assign</button></td>
                                 <td *ngIf="complaint.status !== 'Pending' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>

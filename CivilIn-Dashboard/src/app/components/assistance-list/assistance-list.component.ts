@@ -37,6 +37,9 @@ export class AssistanceListComponent implements OnInit {
   public counts = ["Recieved","Assigned","In Progress","Completed"];
   orderStatus?  = "";
 
+  key : string = 'timestamp';
+  reverse : boolean = false;
+
   constructor(private assistanceService : AssistanceService, private titleService : Title, private modalService : BsModalService, private router: Router) { 
     this.titleService.setTitle("CivilIn-assistance-list");
   }
@@ -54,7 +57,7 @@ export class AssistanceListComponent implements OnInit {
     this.retrieveAssistance();
   }
 
-  retrieveAssistance() : void {
+  public retrieveAssistance() : void {
     this.assistanceService.getAllAssintance().snapshotChanges().pipe(
       map(changes => 
         changes.map(c =>
@@ -63,11 +66,15 @@ export class AssistanceListComponent implements OnInit {
       )
     ).subscribe(data => {
       this.Assistance = data;
-      this.selectedAssistance = data;
+      this.selectedAssistance = this.Assistance?.filter(
+        item => item.status === 'Pending'
+      );
     })
+
+    this.sortTimestamp(this.key);
   }
 
-  setActiveTutorial(assistance: Assistance, index: number): void {
+  public setActiveTutorial(assistance: Assistance, index: number): void {
     this.currentAssistance = assistance;
     this.currentIndex = index;
   }
@@ -89,13 +96,21 @@ export class AssistanceListComponent implements OnInit {
     }
   }
 
-  key : string = 'assUnId';
-  reverse : boolean = false;
-
-  sort(key : string)
+  public sort(key : string)
   {
     this.key=key;
     this.reverse = !this.reverse;
+  }
+
+  public sortTimestamp(key : string)
+  {
+    this.key=key;
+    if(this.reverse == false){
+      this.reverse = !this.reverse;
+    }
+    else{
+      this.reverse = this.reverse;
+    }
   }
 
   public openModal(template : TemplateRef<any>, assistance : Assistance)
@@ -107,7 +122,7 @@ export class AssistanceListComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  openModal_progress(template : TemplateRef<any>, assistance : Assistance)
+  public openModal_progress(template : TemplateRef<any>, assistance : Assistance)
   {
     // sessionStorage.setItem('assistance_progress_unId', JSON.stringify(assistance.assUnId));
     // sessionStorage.setItem('assistance_progress_status', JSON.stringify(assistance.status));
@@ -120,7 +135,7 @@ export class AssistanceListComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  updateAssistance(): void {
+  public updateAssistance(): void {
     const data = {
       status: 'Assigned',
       assignedGRP: this.selectedGRP,
