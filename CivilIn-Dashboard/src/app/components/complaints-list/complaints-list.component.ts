@@ -5,6 +5,8 @@ import { map } from 'rxjs/operators';
 import { Complaint } from 'src/app/models/complaint';
 import { ComplaintService } from 'src/app/services/complaint.service';
 import * as _ from 'lodash';
+import { FormControl, FormGroup } from '@angular/forms';
+import { HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'app-complaints-list',
@@ -18,22 +20,67 @@ export class ComplaintsListComponent implements OnInit {
   currentIndex = -1;
   selectedcomplaintType = '';
   selectedComplaint? : Complaint[];
+  selectedHWHComplaint? : Complaint[];
+  selectedKGPComplaint? : Complaint[];
+  selectedSGUJComplaint? : Complaint[];
+  selectedSDAHComplaint? : Complaint[];
   searchText = '';
-  selectedGRP = 'HWH-GRP';
-  selectedPriority = 'Critical';
+  selectedGRP = 'Select GRP';
+  selectedGRPS = '---Select---';
+  selectedPriority = '---Select---';
   selectedRemarks = '';
   order: any;
   showData: any;
   p:number = 1;
   loader = true;
   modalRef!: BsModalRef;
-  modalComplaint? : String = '';
+  selectedRemarksCompleted = '';
+  modalComplaint_complaintId? : String = '';
+  modalComplaint_remarks? : String = '';
+  modalComplaint_complaintDesc? : String = '';
   modalComplaint_progress_unId? : String = '';
   modalComplaint_progress_status? : string = '';
   modalComplaint_progress_priority? : String = '';
+  modalComplaint_progress_assignedToGRP? : string = '';
+  modalComplaint_remarks_after_completion? : string = '';
   message = '';
   key : string = 'timestamp';
   reverse : boolean = false;
+  currentUser : string = '';
+  today : Date = new Date();
+  curHr = this.today.getHours();
+  wish : string = '';
+  orderPriority? = '';
+
+  // ALL GRP names
+  allGRP = [
+    {
+      id: 'HWH-GRP',
+      name: 'Howrah'
+    },
+    {
+      id: 'KGP-GRP',
+      name: 'Kharagpur'
+    },
+    {
+      id: 'SDAH-GRP',
+      name: 'Sealdah'
+    },
+    {
+      id: 'SGUJ-GRP',
+      name: 'Siliguri'
+    }
+  ];
+
+  dataNotify : any = {
+    'data':{
+      title : 'first notification',
+      body : 'Hello from Soumyadip'
+    },
+    'to': '/topics/howrah'   
+  };
+
+  // All station list
   stn : string[] = [
             "Howrah R/S",
             "Tikiapara R/S",
@@ -84,7 +131,7 @@ export class ComplaintsListComponent implements OnInit {
             "Singur R/S ",
             "Nasibpur R/S",
             "Diara R/S",
-            "Rishra R/S,",
+            "Rishra R/S",
             "Serampore R/S,",
             "Sheoraphully R/S",
             "Baidyabati R/S",
@@ -775,6 +822,541 @@ export class ComplaintsListComponent implements OnInit {
             "Torang R/S",
             "Suisa R/S"];
 
+  // All Non-Local list
+  mail_trn : string[] = [
+    "13021 UP - Mithila Express",
+    "11448 UP - Saktipunj Express",
+    "15959 UP - Kamrup Express",
+    "12369 UP - Haridwar (Kumbha) Exp",
+    "12327 UP - Upasana Express",
+    "13009 UP - Doon Exp",
+    "12351 UP - Danapur Exp",
+    "12333 UP - Vibhuti Exp",
+    "12311 UP - Kalka Mail (Netaji Exp.)",
+    "12307 UP - Jodhpur Exp",
+    "12301 UP - Rajdhani Exp",
+    "12305 UP - Rajdhani Exp",
+    "12323 UP - Anand Bihar (Barmar) Exp.",
+    "15271 UP - Muzafarpur - HWH Janasadharan Exp.",
+    "22912 UP - Shipra Exp.",
+    "12177 UP - Chambal Exp.",
+    "12175 UP - Chambal Exp.",
+    "13071 UP - Jamalpur Exp.",
+    "13023 UP - Gaya Exp",
+    "15711 UP - KIR-HWH Exp.",
+    "12303 UP - HWH-New Delhi Poorva Exp.",
+    "13025 UP - Bhopal Exp.",
+    "12371 UP - HWH-Jaishalmir Exp.",
+    "12353 UP - HWH-LUK Exp.",
+    "13005 UP - Amritsar Mail",
+    "12331 UP - Himgiri Exp.",
+    "13019 UP - Bagh Exp",
+    "12273 UP - NDLS Duronto Exp.",
+    "22387 UP - Black-Diamond Express",
+    "12019 UP - Ranchi-HWH Satabdi Exp.",
+    "12041 UP - HWH- NJP Satabdi Exp.",
+    "12863 UP - Yesvantpur-Howrah Exp.",
+    "12870 UP - CSTM-HWH Exp.",
+    "12871 UP - Sambalpur (Ispat) Exp",
+    "22817 UP - HWH-MYS Exp.",
+    "12073 UP - HWH-Bhubneswar Shatabdi Exp.",
+    "12130 UP - Azad Hind Exp.",
+    "12222 UP - Pune-HWH Duranto Exp",
+    "12245 UP - HWH-SMVT Bengaluru Duranto Exp.",
+    "12262 UP - HWH-Mumbai Duranto Exp.",
+    "12277 UP - HWH-Puri Shatabdi to Exp.",
+    "12663 UP - TPJ-HWH Exp.",
+    "12665 UP - Kanyakumari Exp.",
+    "12703 UP - Falaknuma Exp.",
+    "12810 UP - Mumbai Mail",
+    "12834 UP - Ahemedabad-Howrah Exp.",
+    "12837 UP - Puri Exp.",
+    "12839 UP - HWH-MAS Mail",
+    "12860 UP - Gitanjali Exp.",
+    "12345 UP - Saraighat Exp.",
+    "18013 UP - Bokaro Steel City Exp.",
+    "18011 UP - Chakradharpur Exp.",
+    "12021 UP - Barbil Jan Shatabdi Exp.",
+    "22861 UP - Kantabanji Ispat Exp.",
+    "12857 UP - Tamralipta Exp.",
+    "22897 UP - Kandari Exp.",
+    "22863 UP - SMVT Bengaluru AC SF Exp.",
+    "22887 UP - SMVT Bengaluru Humsafar Exp.",
+    "20889 UP - Tirupati Humsafar Exp.",
+    "22891 UP - Ranchi Intercity Exp.",
+    "18627 UP - Ranchi Intercity Exp.",
+    "22894 UP - Sainagar Shirdi SF Exp.",
+    "22877 UP - Ernakulam Antoydaya Exp.",
+    "22831 UP - Sri Sathya Sai Prashanthi Nilayam SF Exp.",
+    "18043 UP - Bagha Jatain Exp.",
+    "12827 UP - Purulia SF Exp.",
+    "12813 UP - Steel Exp.",
+    "18003 UP - Rani Shiromoni Exp.",
+    "18615 UP - Kriya Yoga Exp.",
+    "18005 UP - Sambaleswari Exp.",
+    "12867 UP - Puducherry SF Exp",
+    "12381 UP - Poorva Exp",
+    "15235 UP - Darbhanga weekly Exp",
+    "12023 UP - Patna Jan Shatabdi Exp",
+    "12339 UP - Coal field Exp",
+    "20975 UP - Agra cantt. Chambal Exp",
+    "12341 UP - Agnibina Exp",
+    "13043 UP - Howrah Raxul Exp",
+    "12938 UP - Garba SF Exp",
+    "13029 UP - Howrah Mokama Exp",
+    "22307 UP - Bikaner SF Exp",
+    "12321 UP - Howrah Mumbai CSMT Mail",
+    "13017 UP - Ganadevata Exp",
+    "13063 UP - Balurghat Exp",
+    "13465 UP - Malda Town Intercity Exp",
+    "03003 UP - Azimganj SPL Exp",
+    "15961 UP - Kamrup Express",
+    "13033 UP - Howrah Katihar Exp",
+    "13027 UP - Azimganj Kaviguru Exp",
+    "03027 UP - NJP SPL",
+    "13053 UP - Kulik Exp",
+    "13015 UP - Jamalpur Kaviguru Exp",
+    "13031 UP - Howrah Jaynagar Exp",
+    "12347 UP - Sahid Exp",
+    "13011 UP - Malda Town Intercity Exp",
+    "13045 UP - Mayurakshi Exp",
+    "03047 UP - Viswabharati Fast Passenger",
+    "12337 UP - Shantiniketan Exp",
+    "22321 UP - Hool Exp",
+    "12864 DN - Yesvantpur-Howrah Exp.",
+    "12869 DN - CSTM-HWH Exp.",
+    "12872 DN - Sambalpur (Ispat) Exp",
+    "22818 DN - HWH-MYS Exp.",
+    "12074 DN - HWH-Bhubneswar Shatabdi Exp.",
+    "12129 DN - Azad Hind Exp.",
+    "12221 DN - Pune-HWH Duranto Exp",
+    "12246 DN - HWH-YPR Duranto Exp.",
+    "12261 DN - HWH-Mumbai Duranto Exp.",
+    "12278 DN - HWH-Puri Shatabdi to Exp.",
+    "12664 DN - TPJ-HWH Exp.",
+    "12666 DN - Kanyakumari Exp.",
+    "12704 DN - Falaknuma Exp.",
+    "12809 DN - Mumbai Mail (Via- Nagpur)",
+    "12833 DN - Ahemedabad-Howrah Exp.",
+    "12838 DN - Puri Exp.",
+    "12840 DN - HWH-MAS Mail",
+    "12859 DN - Gitanjali Exp.",
+    "12346 DN - Saraighat Exp.",
+    "13404 DN - Bananchal Express",
+    "15227 DN - Yesvantpur -Majaffarpur Exp.",
+    "15644 DN - Kamakhya-HWH- Puri Exp.",
+    "12254 DN - BGP-YPR Anga Exp.",
+    "12508 DN - SCL- TVC Exp.",
+    "12510 DN - GHY-SBC Exp.",
+    "12514 DN - GHY-SC Exp.",
+    "12516 DN - Gouhati - Trivandram Coimbatore Exp.",
+    "15640 DN - Kamakha- Puri Exp.",
+    "22201 - Sealdah Puri Duronto Spl.",
+    "12313 - Rajdhani Exp.",
+    "13185 - Ganga Sagar Express",
+    "13175 - Kanchanjunga Exp.",
+    "13163 - Hateybazarey",
+    "13105 - BALIA Exp.",
+    "12259 - Duranta Exp.",
+    "12329 - Samparkranti",
+    "12987 - Ajmeersharif Exp.",
+    "12379 - Jallianwala Bagh Exp.",
+    "22317 - Humsafar Express",
+    "12343 - Darjeeling Mail",
+    "13141 - Tista Torsha Express",
+    "13173 - Kanchanjunga Exp.",
+    "13103 - Bhagirathi Express",
+    "13169 - Hatey bazarey",
+    "12377 - Padatik Express",
+    "13153 - Gour Express",
+    "13187 - Maa Tara Express",
+    "13147 - Uttarbanga Express",
+    "13149 - Kanchankannya Exp.",
+    "12383 - Asansol Inter City express",
+    "13179 - Suri Express",
+    "22197 - V.G.L.B. Express",
+    "12325 - Nangaldam Express",
+    "12317 - Akaltakt Express",
+    "13181 - Silghat Express",
+    "15233 - Darvanga Express",
+    "19607 - Ajmir/Madar Express",
+    "13137 - Azamgar Express",
+    "13151 - Jammu Tawai Express",
+    "12357 - Durgiyana Amritsar Express",
+    "13167 - Agtra Cant Express",
+    "12319 - Agtra Cant Express",
+    "19413 - Amedabad Express",
+    "12315 - Ananya Express",
+    "15047 - Purbanchal Express",
+    "15049 - Purbanchal Express",
+    "15051 - Purbanchal Express",
+    "12359 - Patna Garibrath Express",
+    "13121 - Shabdha Bedi/Gazipur Express",
+    "13159 - Jogabani Express",
+    "13157 - Trihut Express",
+    "13155 - Sitamari/Darvhanga/Mithilanchal Express",
+    "13135 - Jaynagar Express",
+    "12496 - Bikenar Pratap Express",
+    "13165 - Sitamari Express",
+    "22323 - Gazipur City Express",
+    "13113 - Hazarduari Express",
+    "13161 - Tebhaga Express",
+    "13117 - Dhanadhannya Express",
+    "13145 - Radhikapur Express",
+    "12363 - Inter City Express",
+    "13108 - Moitree Express",
+    "13109 - Moitree Express",
+    "13129 - Bandhan Express",
+    "02517 - Kolkata Gouhati Agartala Express",
+    "22202 - Sealdah Puri Duronto Spl.",
+    "12314 - Rajdhani Exp.",
+    "13186 - Ganga Sagar Express",
+    "13174 - Kanchanjunga Exp.",
+    "13164 - Hateybazarey",
+    "13106 - Balia Exp.",
+    "12260 - Duranta Exp.",
+    "12330 - Samparkranti",
+    "12988 - Ajmeersharif Exp.",
+    "12380 - Jallianwala Bagh Exp.",
+    "22318 - Humsafar Express",
+    "13176 - Silchar Express",
+    "22198 - V.G.L.B. Express",
+    "12326 - Nangaldam Express",
+    "12318 - Akaltakt Express",
+    "13182 - Silghat Express",
+    "15234 - Darvanga Express",
+    "19608 - Ajmir/Madar Express",
+    "13138 - Azamgar Express",
+    "13152 - Jammu Tawai Express",
+    "12358 - Durgiyana Amritsar Express",
+    "13168 - Agtra Cant Express",
+    "12320 - Agtra Cant Express",
+    "19414 - Amedabad Express",
+    "12316 - Ananya Express",
+    "15048 - Purbanchal Express",
+    "15050 - Purbanchal Express",
+    "15052 - Purbanchal Express",
+    "12360 - Patna Garibrath Express",
+    "13122 - Shabdha Bedi/Gazipur Express",
+    "13160 - Jogabani Express",
+    "13158 - Trihut Express",
+    "13156 - Sitamari/Darvhanga/Mithilanchal Express",
+    "13136 - Jaynagar Express",
+    "12495 - Bikenar Pratap Express",
+    "13166 - Sitamari Express",
+    "22324 - Gazipur City Express",
+    "15769 - Lamding Intercity Exp.",
+    "15753 - Sifhung Exp.",
+    "15483 - Sikkim Mahananda Exp.",
+    "13150 - Kanchan Kannya Exp.",
+    "15417 - Silghat Town Rajya Rani Exp.",
+    "12378 - Padatik Exp",
+    "13142 - Teesta Torsa Exp.",
+    "13148 - Uttar Banga Exp.",
+    "12042 - Howrah Shatabdi Exp.",
+    "13245 - Capital Exp.",
+    "12344 - Darjeeling Mail",
+    "12523 - New Delhi Sf Exp.",
+    "15722 - Paharia Exp.",
+    "22612 - Mgr Chennai Central Sf Exp.",
+    "4653 - Amritsar Clone Sf Special",
+    "12407 - Amritsar Karmabhoomi Exp.",
+    "15720 - Katihar Intercity Exp.",
+    "13054 - Kulik Exp.",
+    "13146 - Kolkata Rdp Exp.",
+    "13064 - Howrah Exp.",
+    "13162 - Tebhaga Exp.",
+    "13012 - Howrah – Intercity Exp.",
+    "13466 - Howrah – Intercity Exp.",
+    "13154 - Gour Exp.",
+    "14003 - New Delhi Exp.",
+    "13409 - Kiul Intercity Exp.",
+    "13425 - Malda (T) St Exp.",
+    "13413 - Farakka Exp.",
+    "13483 - Farakka Exp.",
+    "13429 - Anand Vihar Terminal Weekly Exp.",
+    "03435 - Anand Vihar Terminal Spl Fare.",
+    "13415 - Patna Exp.",
+    "01666 - Rani Kamalapati Spl",
+    "22502 - SMVT Bengaluru SF Exp.",
+    "20503 - New Delhi Rajdhani Exp.",
+    "14619 - Tripura Sundari Exp.",
+    "14037 - New Delhi Poorvottar Sampark Kranti Exp.",
+    "22449 - New Delhi Poorvottar Sampark Kranti Exp.",
+    "12516 - Coimbatore Exp.",
+    "12508 - Aronai Exp.",
+    "12514 - Secunderabad SF Exp.",
+    "12510 - SMVT Bengaluru SF Exp.",
+    "15906 - Kanyakumari Vivek SF Exp.",
+    "12423 - New Delhi Rajdhani Exp.",
+    "20501 - Anand Vihar Terminal Tejas Rajdhani Exp.",
+    "15960 - Kamrup Exp.",
+    "15626 - Deoghar Weekly Exp",
+    "05611 - New Delhi one-way Spl",
+    "15636 - Okha Dwarka Exp.",
+    "15634 - Bikaner Exp",
+    "15632 - Guwahati - Barmer Exp.",
+    "15653 - Jammu Tawi Amarnath Exp",
+    "15651 - Lohit Exp.",
+    "15648 - Mumbai LTT Exp.",
+    "15630 - Nagaon Exp.",
+    "15646 - Mumbai Ltt Exp.",
+    "13182 - Kaziranga Exp.",
+    "13281 - Rajendra Nagar Terminal Weekly Exp.",
+    "12504 - Smvt Bengaluru Humsafar Exp.",
+    "15933 - Amritsar Exp.",
+    "15903 - Chandigarh Exp.",
+    "02986 - Smvt Bengaluru Sf Spl. Fare",
+    "07029 - Secunderabad Spl.",
+    "15909 - Avadh Assam Exp.",
+    "15621 - Anand Vihar Terminal Weekly Exp.",
+    "19306 - Dr. Ambedkar Nagar Weekly Exp.",
+    "15620 - Gaya Weekly Exp.",
+    "15668 - Gandhidham Exp.",
+    "15655 - Shri Mata Vaishno Devi Katra Weekly Exp.",
+    "15662 - Ranchi Weekly Exp.",
+    "12505 - North East Exp.",
+    "12552 - Smvt Bengaluru Ac Sf Exp.",
+    "15658 - Bramhaputra Mail",
+    "15624 - Bhagat Ki Kothi Exp.",
+    "22512 - Mumbai Ltt Karmabhoomi Exp.",
+    "19616 - Udaipur City Kavi Guru Exp.",
+    "15077 - Gomti Nagar Weekly Exp.",
+    "15640 - Kamakhya Puri Exp.",
+    "12520 - Mumbai Ltt Ac Sf Exp.",
+    "15644 - Kamakhya -Puri Exp.",
+    "13247 - Rajendra Nagar Terminal Capital Exp.",
+    "05727 - Katihar- Radhikapur Passenger Special",
+    "05729 - Katihar- Radhikapur Passenger Special",
+    "05708 - Katihar- Radhikapur Passenger Special",
+    "15228 - Smvt Bengaluru Exp.",
+    "05796 - Thiruvanthapuram Central Sf Spl. Exp.",
+    "13248 - Kamakhya Capital Exp.",
+    "15484 - Sikkim Mahananda Exp.",
+    "15622 - Kamakhya Weekly Exp.",
+    "15078 - Kamakhya Weekly Exp.",
+    "15625 - Agartala Weekly Exp",
+    "15934 - New Tinsukia Exp.",
+    "12506 - North East Exp.",
+    "15904 - Dibrugarh Exp.",
+    "20506 - Dibrugarh Rajdhani Exp.",
+    "20504 - Dibrugarh Rajdhani Exp.",
+    "12424 - Dibrugarh Town Rajdhani Exp.",
+    "19615 - Kamakhya Kavi Guru Exp.",
+    "15654 - Guwahati Amarnath Exp",
+    "15652 - Lohit Exp.",
+    "15633 - Guwahati Exp.",
+    "15631 - Barmer Exp.",
+    "15910 - Avadh Assam Exp.",
+    "20502 - Agartala Tejas Rajdhani Exp.",
+    "22412 - Arunachal Ac Sf Exp.",
+    "12519 - Kamakhya Ac Sf Exp.",
+    "01665 - Agartala Special",
+    "15667 - Kamakhya Exp.",
+    "15635 - Guwahati Dwarka Exp.",
+    "22450 - Guwahati Poorvottar Sampark Kranti Exp.",
+    "14620 - Tripura Sundari Exp.",
+    "14038 - Silchar Poorvattar Sampark Kranti Exp.",
+    "15645 - Dibrugarh Exp.",
+    "15656 - Kamakhya Weekly Exp.",
+    "13282 - Dibrugarh Weekly Exp.",
+    "19305 - Kamakhya Weekly Exp.",
+    "15647 - Guwahati Exp.",
+    "15619 - Kamakhya Weekly Exp.",
+    "15657 - Bramhaputra Mail.",
+    "15716 - Kishanganj Garib Nawaz Exp.",
+    "12346 - Saraighat Exp.",
+    "5639 - Kolkata Spl. Fare Exp",
+    "2518 - Kolkata Spl. Fare Sf. Exp.",
+    "2502 - Kolkata Spl. Fare Sf. Exp",
+    "13176 - Kanchanjungha Exp.",
+    "13174 - Kanchanjungha Exp.",
+    "3174 - Sealdah Spl. Fare Humsafar Puja Spl.",
+    "5702 - Katihar Malda (T) Passenger Spl.",
+    "13034 - Katihar-Howrah Exp.",
+    "13160 - Jogbani Kolkata Exp.",
+    "13170 - Hate Bazare Exp.",
+    "13164 - Hate Bazare Exp.",
+    "15712 - Howrah Weekly Exp.",
+    "5772 - Katihar Malda Court Passenger Spl.",
+    "5718 - Katihar Malda Court Passenger Spl.",
+    "15719 - Siliguri Intercity Exp.",
+    "13246 - New Jalpaiguri Capital Exp.",
+    "7543 - Katihar Siliguri Demu",
+    "4654 - New Jalpaiguri Clone Sf Special",
+    "12524 - New Jalpaiguri Sf Exp.",
+    "12408 - New Jalpaiguri Karmabhoomi Exp.",
+    "19601 - New Jalpaiguri Weekly Exp.",
+    "12821 - Dhauli Exp",
+    "12885 - Aranyak Express",
+    "18045 - East Cost Exp.",
+    "22849 - Secendrabad Weekly Express",
+    "12841 - Coromandal Express",
+    "12773 - Secendrabad AC SF",
+    "18007 - Simlipal Intercity Express",
+    "22853 - Visakhapattanam SF Express",
+    "18409 - Jagannath Exp",
+    "12152 - Samarsata SF Exp",
+    "15021 - Gorakhpur Weekly Exp",
+    "20972 - Udaipur city Weekly Exp",
+    "22803 - Sambalpur SF Exp",
+    "12887 - Puri Weekly SF Exp",
+    "12881 - Garibrath Exp",
+    "22835 - Puri Weekly SF Exp",
+    "12895 - Puri weekly SF Exp",
+    "12102 - Janenswari Exp",
+    "12906 - Porbandar SF Exp",
+    "22906 - Okha Exp",
+    "22213 - Duranta Exp",
+    "22642 - Thiruvananthapuram Exp",
+    "18047 - Amrabati Exp",
+    "12660 - Gurudev Exp",
+    "18030 - Kurla Express",
+    "22830 - Bhuj Express",
+    "22825 - MGR Cennai Central Express",
+    "12883 - Rupashi Bangla Express",
+    "22857 - Santragachi Anand Bihar Weekly",
+    "12768 - Huzur Sahib Nanded Express",
+    "22855 - Tirupati Weekly Express",
+    "20822 - Humsafar Exp",
+    "22807 - Santragachi –Chennai AC Exp",
+    "22170 - Rani Kamalapati Humsafar Exp",
+    "12950 - Kabi Guru Exp",
+    "22841 - Antaday Exp.",
+    "22851 - Vivek Exp.",
+    "18009 - Ajmir Express",
+    "20828 - Humsafar Express",
+    "12884 - Rupashi Bangla Express",
+    "12828 - Howrah SF Express",
+    "22605 - Vellupuram SF Express",
+    "12858 - Tamralipta Exp",
+    "22873 - Visakhapattanam SF Express",
+    "13505 - Asansol Express",
+    "15721 - Paharia Express",
+    "13417 - Malda Town Express",
+    "22898 - Kandari Exp.",
+    "22329 - Haldia Express",
+    "12443 - Anand Bihar Express",
+    "18023 - Kharagpur Gomo Express",
+    "22603 - Vellupuram Express",
+    "18027 - Asansol Memo Express",
+    "18085 - Ranchi Exp",
+    "18035 - Hatia Exp.",
+    "18019 - Dhanbad Express",
+    "18004 - Shiromani Express",
+    "12822 - Dhauli Exp",
+    "12886 - Aranyak Express",
+    "22858 - Santragachi Anand Bihar Weekly",
+    "18046 - East Cost Exp.",
+    "22850 - Secendrabad Weekly Express",
+    "12767 - Huzur Sahib Nanded Express",
+    "22856 - Tirupati Weekly Express",
+    "12774 - Secendrabad AC SF",
+    "18008 - Simlipal Intercity Express",
+    "20821 - 20821 Humsafar Exp",
+    "22808 - Chennai- Santragachi Ac Exp",
+    "22854 - Visakhapatnam- Shalimar Exp",
+    "18410 - Jagannath Exp",
+    "12151 - Samarsata Exp",
+    "15022 - Gorakhpur Weekly Exp",
+    "20971 - Udaipur City Weekly Exp",
+    "22169 - Rani Kamalapati Humsafar Exp",
+    "22804 - Sambalpur Sf Exp",
+    "12888 - Puri Weekly Sf Exp",
+    "12882 - Garibrath Exp",
+    "22836 - Puri Weekly Sf Exp",
+    "12896 - Puri Weekly Sf Exp",
+    "12101 - Janenswari Exp",
+    "12905 - Porbandar Sf Exp",
+    "22905 - Okha Exp",
+    "12949 - Kabi Guru Exp",
+    "22214 - Duranta Exp",
+    "22641 - Thiruvananthapuram Exp",
+    "18048 - Amrabati Exp",
+    "12659 - Gurudev Exp",
+    "22874 - Digha Sf Express",
+    "12842 - Coromandal Express",
+    "18024 - Gomo Kharagpur Express",
+    "22604 - Kharagpur Express",
+    "18020 - Jhargram Express",
+    "18086 - Kharagpur Exp",
+    "12444 - Haldia Express",
+    "22606 - Purulia Sf Express",
+    "18029 - Kurla Express",
+    "22842 - Antaday Exp.",
+    "22852 - Vivek Exp",
+    "18036 - Kharagpur Exp.",
+    "18010 - Santragachi Express",
+    "22829 - Bhuj Express",
+    "20827 - Humsafar Express",
+    "22826 - Shalimar Express",
+    "18477 - Utkal Express",
+    "18478 - Utkal Express",
+    "12801 - Purusattam Exp.",
+    "12802 - Purusattam Exp",
+    "15643 - Kamakhya Exp",
+    "15644 - Kamakhya Exp",
+    "12515 - Silchar Exp",
+    "12516 - Silchar Exp",
+    "22643 - Patna Sf Express",
+    "22644 - Ernakulam Sf Express",
+    "12509 - Guwahati Express",
+    "12510 - Guwahati Express",
+    "15227 - Mujafarpur Sf Express",
+    "15228 - Yasvantpur Sf Express",
+    "22501 - New Tinsukia Weekly Sf Express",
+    "22502 - Bengaluru Weekly Sf Express",
+    "12507 - Aronai Express",
+    "12508 - Aronai Express",
+    "15905 - Dibrugarh Vivek Sf Express",
+    "15906 - Kanyakumari Vivek Sf Express",
+    "12281 - Duranto Express",
+    "12282 - Duranto Express",
+    "22823 - Rajdhani Express",
+    "22824 - Rajdhani Express",
+    "12551 - Kamakhya Weekly Ac Sf Express",
+    "12552 - Yasvantpur Weekly Ac Sf Express",
+    "22811 - Rajdhani Express",
+    "22812 - Rajdhani Express",
+    "12503 - Humsafar Exp",
+    "12504 - Humsafar Exp",
+    "07030 - Agartala Spl Exp",
+    "07029 - Secendrabad Spl. Exp.",
+    "12513 - Guwahati Sf Express",
+    "12514 - Secendrabad Sf Express",
+    "22511 - Kamakhya Karma Bhumi Exp",
+    "22512 - Lokmanya Tilak Karma Bhumi Exp",
+    "12875 - Nilachal Express",
+    "12876 - Nilachal Express",
+    "12815 - Nandan Kanan Express",
+    "12816 - Nandan Kanan Express",
+    "15639 - Kamakhya Express",
+    "15640 - Puri Express",
+    "12253 - Angya Express",
+    "12254 - Angya Express",
+    "18419 - Jaynagar Weekly Express",
+    "18420 - Puri Weekly Express",
+    "18449 - Badhyanathdham Exp",
+    "18450 - Badhyanathdham Exp",
+    "15629 - Nagaon Express",
+    "15630 - Nagaon Express",
+    "12819 - Sampark Kranti Express",
+    "12820 - Sampark Kranti Express",
+    "15929 - New Tinsukia Express",
+    "12930 - Tambaram Express",
+    "18182 - Chhapra Tata Exp",
+    "18181 - Tata Chhapra Exp",
+    "13288 - South Bihar Exp",
+    "13287 - South Bihar Exp",
+    "22844 - Bilashpur Weekly Sf Exp",
+    "22843 - Patna Weekly Sf Exp",
+    "18184 - Tatanagar Sf Exp",
+    "18183 - Danapur Sf Exp",
+    "18104 - Jallianwalabag Exp",
+    "18103 - Jallianwalabag Exp",
+    "20817 - Rajdhani Exp",
+    "20818 - Rajdhani Exp"];
+
   //Demo purpose only, Data might come from Api calls/service
   name = 'Progress Bar';
   public counts = ["Recieved","Assigned","In Progress","Completed"];
@@ -782,6 +1364,8 @@ export class ComplaintsListComponent implements OnInit {
 
   constructor(private complaintService : ComplaintService, private titleService : Title, private modalService : BsModalService) {
     this.titleService.setTitle("CivilIn-complaints-list");
+
+    this.isLoggedIn();
    }
 
   ngOnInit(): void {
@@ -804,13 +1388,13 @@ export class ComplaintsListComponent implements OnInit {
       // convert stn_details to station name
 
       this.Complaints.forEach( (element) => {
-        console.log("stn_details " + element.stn_details);
+        // console.log("stn_details " + element.stn_details);
         const n = element.stn_details;
-        console.log("stn_details--->n " + n);
+        // console.log("stn_details--->n " + n);
         
         element.stn_details_name = this.stn[n!];
 
-        console.log("element.stn_details_name " + element.stn_details_name);
+        // console.log("element.stn_details_name " + element.stn_details_name);
       })
 
       // convert trainPnr to station names
@@ -819,11 +1403,26 @@ export class ComplaintsListComponent implements OnInit {
         var newarr = element.trainPnr!.split("|");
         const n1 = Number(newarr[0]);
         const n2 = Number(newarr[1]);
-        console.log("n1 "+n1 + "n2 " + n2);
+        // console.log("n1 "+n1 + "n2 " + n2);
+        element.mailTrainNo = this.mail_trn[n1!];
         element.stn_starting = this.stn[n1!];
         element.stn_ending = this.stn[n2!];
-        console.log("element.stn_starting"+element.stn_starting);
-        console.log("element.stn_ending"+element.stn_ending);
+        //console.log("element.mailTrainNo"+element.mailTrainNo);
+        // console.log("element.stn_starting"+element.stn_starting);
+        // console.log("element.stn_ending"+element.stn_ending);
+
+        this.selectedHWHComplaint = this.Complaints?.filter(
+          item => item.assignedGRP === 'HWH-GRP'
+        )
+        this.selectedKGPComplaint = this.Complaints?.filter(
+          item => item.assignedGRP === 'KGP-GRP'
+        )
+        this.selectedSGUJComplaint = this.Complaints?.filter(
+          item => item.assignedGRP === 'SGUJ-GRP'
+        )
+        this.selectedSDAHComplaint = this.Complaints?.filter(
+          item => item.assignedGRP === 'SDAH-GRP'
+        )
 
       })
 
@@ -875,7 +1474,8 @@ export class ComplaintsListComponent implements OnInit {
   {
     sessionStorage.setItem('complaint_unId', JSON.stringify(complaint.complaintUnId));
     this.currentComplaint = complaint;
-    this.modalComplaint = JSON.stringify(complaint.complaintUnId);
+    this.modalComplaint_complaintId = JSON.stringify(complaint.complaintUnId);
+    this.modalComplaint_complaintDesc = complaint.complaintBrief;
     this.modalRef = this.modalService.show(template);
   }
 
@@ -887,15 +1487,50 @@ export class ComplaintsListComponent implements OnInit {
     this.modalComplaint_progress_unId = JSON.stringify(complaint.complaintUnId);
     this.modalComplaint_progress_status = JSON.stringify(complaint.status);
     this.modalComplaint_progress_priority = JSON.stringify(complaint.priority);
+    this.modalComplaint_progress_assignedToGRP = complaint.assignedGRP;
+    this.modalComplaint_complaintDesc = complaint.complaintBrief;
+    this.modalComplaint_remarks_after_completion = complaint.modalComplaint_remarks;
+    this.modalComplaint_remarks = complaint.remarks;
     this.orderStatus = complaint.status;
     console.log("orderStatus "+this.orderStatus);
     this.modalRef = this.modalService.show(template);
   }
 
+  public openModal_afterAssigned(template : TemplateRef<any>, complaint : Complaint)
+  {
+    sessionStorage.setItem('complaint_unId', JSON.stringify(complaint.complaintUnId));
+    this.currentComplaint = complaint;
+    this.modalComplaint_progress_unId = JSON.stringify(complaint.complaintUnId);
+    this.modalComplaint_complaintDesc = complaint.complaintBrief;
+    this.modalComplaint_progress_status = JSON.stringify(complaint.status);
+    this.modalComplaint_progress_priority = JSON.stringify(complaint.priority);
+    this.modalComplaint_remarks = complaint.remarks;
+    this.orderStatus = complaint.status;
+    this.orderPriority = complaint.priority;
+    console.log("orderStatus "+this.orderStatus);
+    this.modalRef = this.modalService.show(template);
+  }
+
+  public openModal_complete(template : TemplateRef<any>, complaint : Complaint)
+  {
+    sessionStorage.setItem('complaint_unId', JSON.stringify(complaint.complaintUnId));
+    this.currentComplaint = complaint;
+    this.modalComplaint_progress_unId = JSON.stringify(complaint.complaintUnId);
+    this.modalComplaint_complaintDesc = complaint.complaintBrief;
+    this.modalComplaint_progress_priority = JSON.stringify(complaint.priority);
+    // this.modalAssistance_remarks_HQ = assistance.remarks;
+    this.modalComplaint_remarks = complaint.remarks;
+    this.orderStatus = complaint.status;
+    this.orderPriority = complaint.priority;
+    this.modalRef = this.modalService.show(template);
+  }
+
   public updateComplaint(): void {
+
     const data = {
       status: 'Assigned',
       assignedGRP: this.selectedGRP,
+      assignedGRPS: this.selectedGRPS,
       priority: this.selectedPriority,
       remarks: this.selectedRemarks
       //description: this.currentTutorial.description
@@ -909,7 +1544,355 @@ export class ComplaintsListComponent implements OnInit {
         .catch(err => console.log(err));
     }
 
+    this.complaintService.sendNotification(this.dataNotify).subscribe((resp)=>{
+      console.log(resp);
+    });
+
+    sessionStorage.removeItem('complaint_unId');
+    this.selectedGRP = 'Select GRP';
+    this.selectedGRPS = '';
+    this.selectedPriority = '';
+    this.selectedRemarks = '';
+    this.modalService.hide();
+  }
+
+  public acceptComplaint(): void {
+    const data = {
+      status: 'In Progress',
+    };
+
+    console.log("data after assign" + data);
+
+    if (this.currentComplaint!.key) {
+      this.complaintService.update(this.currentComplaint!.key, data)
+        .then(() => this.message = 'The Complaint was updated successfully!')
+        .catch(err => console.log(err));
+    }
+
     sessionStorage.removeItem('complaint_unId');
     this.modalService.hide();
   }
+
+  public completeComplaint(): void {
+    const data = {
+      status: 'Completed',
+      // remarksAfterCompletion : this.selectedRemarksCompleted
+      // modalAssistance_remarks_HQ : this.selectedRemarksCompleted
+      modalComplaint_remarks : this.selectedRemarksCompleted
+    };
+
+    console.log("data after assign" + data);
+
+    if (this.currentComplaint!.key) {
+      this.complaintService.update(this.currentComplaint!.key, data)
+        .then(() => this.message = 'Assistance completed successfully!')
+        .catch(err => console.log(err));
+    }
+
+    sessionStorage.removeItem('complaint_unId');
+    // this.selectedRemarksCompleted = '';
+    this.selectedRemarksCompleted = '';
+    this.modalService.hide();
+  }
+
+  public isLoggedIn() {
+    var CryptoJS = require("crypto-js");
+    const secret = "xkMBON33!78kn@";
+    let UserStr = sessionStorage.getItem('user')!;
+    const decTempUser = CryptoJS.AES.decrypt(UserStr, secret);
+    const user = JSON.parse(decTempUser.toString(CryptoJS.enc.Utf8));
+    this.currentUser = user.email;
+    // console.log(this.currentUser);
+    if(this.curHr<12)
+    {
+      this.wish = 'Good Morning';
+    } else if(this.curHr<16)
+    {
+      this.wish = 'Good Afternoon';
+    } else
+    {
+      this.wish = 'Good Evening';
+    }
+  }
+
+  // Code for Assign functionality for #template_new
+
+  allGRPS: any[] = [];
+  form = new FormGroup({
+    GRP: new FormControl(),
+    GRPS: new FormControl()
+  });
+  
+  public checkFirstDropdown($event: any){
+     this.allGRPS=GRPSList.filter(c=>c.cid===$event);
+      let  itm=this.allGRPS[0];
+      this.form.controls['GRPS'].setValue(itm.id);
+     console.log($event);
+  }
 }
+
+export const GRPSList = [
+  {
+    id: "1",
+    cid: 'HWH-GRP',
+    city: "Howrah",
+  },
+  {
+    id: "2",
+     cid: 'HWH-GRP',
+    city: "Belur",
+  
+  },
+  {
+    id: "3",
+     cid: 'HWH-GRP',
+    city: "Kamarkundu",
+  
+  },
+  {
+    id: "4",
+     cid: 'HWH-GRP',
+    city: "Sheoraphully",
+  
+  },
+  {
+    id: "5",
+     cid: 'HWH-GRP',
+    city: "Bandel",
+  
+  },
+  {
+    id: "6",
+     cid: 'HWH-GRP',
+    city: "Burdwan",
+  
+  },
+  {
+    id: "7",
+     cid: 'HWH-GRP',
+    city: "Andal",
+  
+  },
+  {
+    id: "8",
+     cid: 'HWH-GRP',
+    city: "Asansol",
+  
+  },
+  {
+    id: "9",
+     cid: 'HWH-GRP',
+    city: "Kalna",
+  
+  },
+  {
+    id: "10",
+     cid: 'HWH-GRP',
+    city: "Katwa",
+  
+  },
+  {
+    id: "11",
+     cid: 'HWH-GRP',
+    city: "Sainthia",
+  
+  },
+  {
+    id: "12",
+     cid: 'HWH-GRP',
+    city: "Suri",
+  
+  },
+  {
+    id: "13",
+     cid: 'HWH-GRP',
+    city: "Azimganj",
+  
+  },
+  {
+    id: "14",
+    cid: 'SDAH-GRP',
+    city: "Sealdah",
+  },
+  {
+    id: "15",
+    cid: 'SDAH-GRP',
+    city: "Dum_Dum",
+  },
+  {
+    id: "16",
+     cid: 'SDAH-GRP',
+    city: "Chitput",
+  
+  },
+  {
+    id: "17",
+     cid: 'SDAH-GRP',
+    city: "Naihati",
+  
+  },
+  {
+    id: "18",
+     cid: 'SDAH-GRP',
+    city: "Ranaghat",
+  
+  },
+  {
+    id: "19",
+     cid: 'SDAH-GRP',
+    city: "Krishnanagar",
+  
+  },
+  {
+    id: "20",
+     cid: 'SDAH-GRP',
+    city: "Berhampore_Court",
+  
+  },
+  {
+    id: "21",
+     cid: 'SDAH-GRP',
+    city: "Bongoan",
+  
+  },
+  {
+    id: "22",
+     cid: 'SDAH-GRP',
+    city: "Barasat",
+  
+  },
+  {
+    id: "23",
+     cid: 'SDAH-GRP',
+    city: "Ballygunge",
+  
+  },
+  {
+    id: "24",
+     cid: 'SDAH-GRP',
+    city: "Jadavpur",
+  
+  },
+  {
+    id: "25",
+     cid: 'SDAH-GRP',
+    city: "Sonarpur",
+  
+  },
+  {
+    id: "26",
+     cid: 'SDAH-GRP',
+    city: "Baruipur",
+  
+  },
+  {
+    id: "27",
+     cid: 'SDAH-GRP',
+    city: "Diamond_Harbour",
+  
+  },
+  {
+    id: "28",
+    cid: 'SGUJ-GRP',
+    city: "Malda_Town",
+  },
+  {
+    id: "29",
+    cid: 'SGUJ-GRP',
+    city: "Dalkhola",
+  },
+  {
+    id: "30",
+    cid: 'SGUJ-GRP',
+    city: "New_Jalpaiguri ",
+  },
+  {
+    id: "31",
+    cid: 'SGUJ-GRP',
+    city: "New_maynaguri",
+  },
+  {
+    id: "32",
+    cid: 'SGUJ-GRP',
+    city: "New_Coochbehar",
+  },
+  {
+    id: "33",
+     cid: 'SGUJ-GRP',
+    city: "Alipurduar_Jn",
+  
+  },
+  {
+    id: "34",
+     cid: 'SGUJ-GRP',
+    city: "Siliguri_Town",
+  
+  },
+  {
+    id: "35",
+     cid: 'SGUJ-GRP',
+    city: "New_Mal_Jn",
+  
+  },
+  {
+    id: "36",
+     cid: 'SGUJ-GRP',
+    city: "Balurghat",
+  
+  },
+  {
+    id: "37",
+     cid: 'KGP-GRP',
+    city: "Shalimar",
+  
+  },
+  {
+    id: "38",
+     cid: 'KGP-GRP',
+    city: "Uluberia",
+  
+  },
+  {
+    id: "39",
+     cid: 'KGP-GRP',
+    city: "Panskura",
+  
+  },
+  {
+    id: "40",
+     cid: 'KGP-GRP',
+    city: "Haldia",
+  
+  },
+  {
+    id: "41",
+    cid: 'KGP-GRP',
+    city: "Digha",
+  },
+  {
+    id: "42",
+     cid: 'KGP-GRP',
+    city: "Kharagpur",
+  
+  },
+  {
+    id: "43",
+    cid: 'KGP-GRP',
+    city: "Jhargram",
+  },
+  {
+    id: "44",
+    cid: 'KGP-GRP',
+    city: "Bankura",
+  },
+  {
+    id: "45",
+    cid: 'KGP-GRP',
+    city: "Adra",
+  },
+  {
+    id: "46",
+    cid: 'KGP-GRP',
+    city: "Purulia",
+  },
+];

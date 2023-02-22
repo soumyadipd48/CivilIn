@@ -11,4 +11,9 @@ export class Assistance {
     status? : string;
     timestamp?: number;
     priority?: string;
+    assignedGRP? : string;
+    assignedGRPS? : string;
+    remarks? : string;
+    //modalAssistance_remarks_HQ? : string;
+    modalAssistance_remarks? : string;
 }

@@ -22,7 +22,7 @@ export class AuthService {
 
     var CryptoJS = require("crypto-js");
 
-    /* Saving user data in localstorage when 
+    /* Saving user data in session storage when 
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe((user) => {
       if(user)
@@ -99,7 +99,7 @@ export class AuthService {
   //   return (user !== null && user.emailVerified !== false) ? true : false;
   // }
 
-  //new get logged in
+  // get logged in
     get isLoggedIn(): boolean {
       var CryptoJS = require("crypto-js");
       const secret = "xkMBON33!78kn@";

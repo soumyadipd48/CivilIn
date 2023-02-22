@@ -21,7 +21,7 @@ import { provideMessaging,getMessaging } from '@angular/fire/messaging';
 import { providePerformance,getPerformance } from '@angular/fire/performance';
 import { provideRemoteConfig,getRemoteConfig } from '@angular/fire/remote-config';
 import { provideStorage,getStorage } from '@angular/fire/storage';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
@@ -35,6 +35,7 @@ import { Ng2OrderModule} from 'ng2-order-pipe';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { ModalModule} from 'ngx-bootstrap/modal'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HttpClientModule} from '@angular/common/http'
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     FormsModule,
     ModalModule.forRoot(),
@@ -72,7 +74,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     Ng2SearchPipeModule,
     Ng2OrderModule,
     NgxPaginationModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    HttpClientModule
   ],
   providers: [
     ScreenTrackingService,UserTrackingService,AuthService
