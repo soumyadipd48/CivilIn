@@ -7,6 +7,8 @@ import { ComplaintService } from 'src/app/services/complaint.service';
 import * as _ from 'lodash';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http'
+import { UserService } from 'src/app/services/user.service';
+import { UserGRPS } from 'src/app/models/user-grps';
 
 @Component({
   selector: 'app-complaints-list',
@@ -16,14 +18,22 @@ import { HttpHeaders } from '@angular/common/http'
 export class ComplaintsListComponent implements OnInit {
 
   Complaints? : Complaint[];
+  userGRPS? : UserGRPS[];
   currentComplaint? : Complaint;
   currentIndex = -1;
+  currentLoggedInUser : string = '';
   selectedcomplaintType = '';
   selectedComplaint? : Complaint[];
+  selectedGRPSComplaint? : Complaint[];
+  selectedGRPSComplaintTemp? : Complaint[];
   selectedHWHComplaint? : Complaint[];
+  selectedHWHComplaintTemp? : Complaint[];
   selectedKGPComplaint? : Complaint[];
+  selectedKGPComplaintTemp? : Complaint[];
   selectedSGUJComplaint? : Complaint[];
+  selectedSGUJComplaintTemp? : Complaint[];
   selectedSDAHComplaint? : Complaint[];
+  selectedSDAHComplaintTemp? : Complaint[];
   searchText = '';
   selectedGRP = 'Select GRP';
   selectedGRPS = '---Select---';
@@ -1362,7 +1372,7 @@ export class ComplaintsListComponent implements OnInit {
   public counts = ["Recieved","Assigned","In Progress","Completed"];
   orderStatus?  = "";
 
-  constructor(private complaintService : ComplaintService, private titleService : Title, private modalService : BsModalService) {
+  constructor(private complaintService : ComplaintService, private titleService : Title, private modalService : BsModalService, private userService : UserService,) {
     this.titleService.setTitle("CivilIn-complaints-list");
 
     this.isLoggedIn();
@@ -1372,7 +1382,34 @@ export class ComplaintsListComponent implements OnInit {
     setTimeout(()=>{
       this.loader=false;
     }, 2000);
+    this.retrieveUserGRPS();
     this.retrieveComplaint();
+    // this.retrieveUserGRPS();
+  }
+
+  public retrieveUserGRPS() : void {
+    this.userService.getAllUserGRPS().snapshotChanges().pipe(
+      map(changes => 
+        changes.map(c =>
+          ({ key : c.payload.key, ...c.payload.val()})
+        )
+      )
+    ).subscribe(data => {
+      this.userGRPS = data;
+      console.log(this.userGRPS);
+
+      this.userGRPS.forEach( (element) => {
+        var newEmailVar = element.grpsEmail;
+        var newNamevar = element.grpsName;
+        // console.log(newEmailVar);
+        // console.log(newNamevar);
+        if(newEmailVar === this.currentUser && newNamevar!= null)
+        {
+          this.currentLoggedInUser = newNamevar;
+          // console.log("currentLoggedInUser"+this.currentLoggedInUser);
+        }
+      })
+    })
   }
 
   public retrieveComplaint() : void {
@@ -1411,19 +1448,38 @@ export class ComplaintsListComponent implements OnInit {
         // console.log("element.stn_starting"+element.stn_starting);
         // console.log("element.stn_ending"+element.stn_ending);
 
+        var newGRPSNo : string;
+        GRPSList.forEach( (element1) => {
+          console.log("city"+element1.city);
+          console.log("currentLoggedInUser"+this.currentLoggedInUser);
+          if(this.currentLoggedInUser === element1.city && element1.id!=null)
+          {
+            newGRPSNo = element1.id;
+            console.log("inside newGRPSNo"+newGRPSNo);  
+          }
+          console.log("newGRPSNo"+newGRPSNo);
+        })
+
+        this.selectedGRPSComplaint = this.Complaints?.filter(
+          item => item.assignedGRPS === newGRPSNo
+        )
+
         this.selectedHWHComplaint = this.Complaints?.filter(
           item => item.assignedGRP === 'HWH-GRP'
         )
+        this.selectedHWHComplaintTemp = this.selectedHWHComplaint;
         this.selectedKGPComplaint = this.Complaints?.filter(
           item => item.assignedGRP === 'KGP-GRP'
         )
+        this.selectedKGPComplaintTemp = this.selectedKGPComplaint;
         this.selectedSGUJComplaint = this.Complaints?.filter(
           item => item.assignedGRP === 'SGUJ-GRP'
         )
+        this.selectedSGUJComplaintTemp = this.selectedSGUJComplaint;
         this.selectedSDAHComplaint = this.Complaints?.filter(
           item => item.assignedGRP === 'SDAH-GRP'
         )
-
+        this.selectedSDAHComplaintTemp = this.selectedSDAHComplaint;
       })
 
       this.selectedComplaint = this.Complaints?.filter(
@@ -1436,20 +1492,121 @@ export class ComplaintsListComponent implements OnInit {
     })
   }
 
+  //OLD method for value selected
+
+  // public valueSelected(){
+  //   if(this.selectedcomplaintType === 'All')
+  //   {
+  //     this.selectedComplaint = this.Complaints;
+  //     console.log("else" + this.selectedComplaint);
+  //     console.log("Else selected head" + this.selectedcomplaintType);
+  //   }
+  //   else
+  //   {
+  //     this.selectedComplaint = this.Complaints?.filter(
+  //       item => item.status === this.selectedcomplaintType
+  //     );
+  //     console.log("If" + this.selectedComplaint);
+  //     console.log("If selected head" + this.selectedcomplaintType);
+  //   }
+  // }
+
   public valueSelected(){
-    if(this.selectedcomplaintType === 'All')
-    {
-      this.selectedComplaint = this.Complaints;
-      console.log("else" + this.selectedComplaint);
-      console.log("Else selected head" + this.selectedcomplaintType);
+    if(this.currentUser === 'hwh.srp@gmail.com'){
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedHWHComplaint = this.selectedHWHComplaintTemp;
+        console.log("else" + this.selectedHWHComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedHWHComplaint = this.selectedHWHComplaintTemp?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedHWHComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
     }
-    else
-    {
-      this.selectedComplaint = this.Complaints?.filter(
-        item => item.status === this.selectedcomplaintType
-      );
-      console.log("If" + this.selectedComplaint);
-      console.log("If selected head" + this.selectedcomplaintType);
+    else if(this.currentUser === 'grpkgp.control.room@gmail.com'){
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedKGPComplaint = this.selectedKGPComplaintTemp;
+        console.log("else" + this.selectedKGPComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedKGPComplaint = this.selectedKGPComplaintTemp?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedKGPComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
+    }
+    else if(this.currentUser === 'grpsdah.control.room@gmail.com'){
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedSDAHComplaint = this.selectedSDAHComplaintTemp;
+        console.log("else" + this.selectedSDAHComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedSDAHComplaint = this.selectedSDAHComplaintTemp?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedSDAHComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
+    }
+    else if(this.currentUser === 'grpsguj.control.room@gmail.com'){
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedSGUJComplaint = this.selectedSGUJComplaintTemp;
+        console.log("else" + this.selectedSGUJComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedSGUJComplaint = this.selectedSGUJComplaintTemp?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedSGUJComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
+    }
+    else if(this.currentUser === 'grphq.control.room@gmail.com'){
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedComplaint = this.Complaints;
+        console.log("else" + this.selectedComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedComplaint = this.Complaints?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
+    }
+    else{
+      if(this.selectedcomplaintType === 'All')
+      {
+        this.selectedGRPSComplaint = this.selectedGRPSComplaintTemp;
+        console.log("else" + this.selectedGRPSComplaint);
+        console.log("Else selected head" + this.selectedcomplaintType);
+      }
+      else
+      {
+        this.selectedGRPSComplaint = this.selectedGRPSComplaintTemp?.filter(
+          item => item.status === this.selectedcomplaintType
+        );
+        console.log("If" + this.selectedGRPSComplaint);
+        console.log("If selected head" + this.selectedcomplaintType);
+      }
     }
   }
 
@@ -1544,6 +1701,27 @@ export class ComplaintsListComponent implements OnInit {
         .catch(err => console.log(err));
     }
 
+    //notification code to send notification to each GRPS selected from dropdown
+
+    var tempGRPS : string;
+
+    GRPSList.forEach((element) => {
+      if(element.id === this.selectedGRPS)
+      {
+        tempGRPS = element.city.toLowerCase();
+        console.log("tempGRPS"+tempGRPS);
+      }
+    })
+
+    this.dataNotify = {
+      "data":{
+        title : 'New Notification',
+        body : 'New Complaint registered'
+      },
+      // 'to': '/topics/{{ tempGRPS }}'
+      "to": "/topics/"+tempGRPS!
+    };
+
     this.complaintService.sendNotification(this.dataNotify).subscribe((resp)=>{
       console.log(resp);
     });
@@ -1602,7 +1780,42 @@ export class ComplaintsListComponent implements OnInit {
     const decTempUser = CryptoJS.AES.decrypt(UserStr, secret);
     const user = JSON.parse(decTempUser.toString(CryptoJS.enc.Utf8));
     this.currentUser = user.email;
-    // console.log(this.currentUser);
+    // this.retrieveUserGRPS();
+    console.log(this.currentUser);
+
+
+    // this.userService.getAllUserGRPS().snapshotChanges().pipe(
+    //   map(changes => 
+    //     changes.map(c =>
+    //       ({ key : c.payload.key, ...c.payload.val()})
+    //     )
+    //   )
+    // ).subscribe(data => {
+    //   this.userGRPS = data;
+    //   console.log(this.userGRPS);
+    // })
+
+    // // this.userGRPS?.forEach( (element) => {
+    // //   console.log("inside current user" + this.currentUser);
+    // //   if(this.currentUser !== element.grpsEmail!){
+    // //     var newVar = element.grpsName;
+    // //     console.log(newVar);
+    // //   }
+    // // })
+    // this.userGRPS?.forEach((element) => {
+    //   var newVar = element.grpsEmail;
+    //   if(newVar === this.currentUser)
+    //   {
+    //     console.log("Yes");
+    //   }
+    //   else{
+    //     console.log("No");
+    //   }
+    //   console.log("executed");
+    // })
+    
+
+
     if(this.curHr<12)
     {
       this.wish = 'Good Morning';

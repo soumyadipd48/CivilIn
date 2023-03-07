@@ -26,6 +26,7 @@ export class Complaint {
     userPhone? : string;
     priority?: string;
     assignedGRP? : string;
+    assignedGRPS? : string;
     remarks? : string;
     modalComplaint_remarks? : string;
 }

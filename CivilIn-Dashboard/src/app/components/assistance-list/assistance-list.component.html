@@ -21,7 +21,8 @@
         <app-navbar></app-navbar>
         <section class='section_gradient' id='section_gradient'>
             <div class="loggedinUser">
-                <p>{{wish}}, {{currentUser}}!</p>
+                <!-- <p>{{wish}}, {{currentUser}}!</p> -->
+                <p>{{wish}}, {{currentLoggedInUser}}!</p>
             </div>
             <div class="header_fixed_ass">
 
@@ -134,7 +135,7 @@
                                 <option value="Medium">Medium</option>
                                 <option value="Low">Low</option>
                             </select><br>
-                            <label for="remarks" style="margin-left: 10px; font-weight: bold;">Remarks(if Any): </label><br>
+                            <label for="remarks" style="margin-left: 10px; font-weight: bold;">Remarks: </label><br>
                             <textarea id="remarks" name="remarks" rows="4" cols="50" style="margin-left: 10px; padding: 10px; margin-top: 10px;" placeholder="Type your remarks.." [(ngModel)]="selectedRemarks" required></textarea><br><br>
                             <input type="submit" value="Submit" class="btn btn-primary float-start" (click)="updateAssistance()" style="padding: 5px; margin-bottom: 5px; margin-left: 5px;"/>
                             <button type="button" class="btn btn-primary float-end" (click)="modalRef.hide()" style="padding: 5px; margin-bottom: 5px; margin-right: 5px;">
@@ -241,6 +242,54 @@
 
                     </section>
                 </ng-template>
+
+                <!-- SHOW TABLE DATA FOR EVERY GRPS -->
+
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='grphwh.control.room@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='hwh.srp@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:94%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('assUnId')" style="min-width: 75px; width: 75px; text-align: center;"
+                                    class="col-id-no fixed-header">Request Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('assName')" style="min-width: 100px; width:100px; text-align: center;"
+                                    class="col-first-name fixed-header">User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('assHead')" style="min-width: 120px; width:120px; text-align: center;">
+                                    Assistance Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 280px; width:280px; text-align: center;">Remarks</th>
+                                <th (click)="sort('station')" style="min-width: 100px; width:100px; text-align: center;">
+                                    Station&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let assistance of selectedGRPSAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
+                                <td style="text-align: center;">{{ assistance.assHead }}</td>
+                                <td style="text-align: center;">{{ assistance.assRemarks }}</td>
+                                <td style="text-align: center;">{{ assistance.station }}</td>
+                                <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td style="text-align: center;">{{ assistance.status }}</td>
+                                <td *ngIf="assistance.status === 'Pending' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal(template_new, assistance)">Assign</button></td>
+                                <td *ngIf="assistance.status !== 'Pending' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td>
+                                <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Accept</button></td>
+                                <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedGRPSAssistance?.length === 0" style="margin-left: 600px; margin-top: 100px;">No Records
+                        Found</p>
+                </div>
     
                 <!-- SHOW TABLE DATA FOR CONTROL ROOM -->
 
@@ -286,7 +335,8 @@
 
                 <!-- SHOW TABLE DATA FOR HOWRAH GRP -->
 
-                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphwh.control.room@gmail.com'">
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphwh.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='hwh.srp@gmail.com'">
                     <table class="freeze-table" style="width:94%" id="myTable">
                         <thead>
                             <tr>
@@ -315,12 +365,13 @@
                                 <td style="text-align: center;">{{ assistance.assRemarks }}</td>
                                 <td style="text-align: center;">{{ assistance.station }}</td>
                                 <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td>
-                                <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
-                                <!-- <td *ngIf="assistance.status !== 'Assigned' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
-                                <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td> -->
+                                <!-- <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center;">{{ assistance.status }}</td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
+                                <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td> -->
+                                <!-- <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -360,12 +411,13 @@
                                 <td style="text-align: center;">{{ assistance.assRemarks }}</td>
                                 <td style="text-align: center;">{{ assistance.station }}</td>
                                 <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td>
-                                <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
-                                <!-- <td *ngIf="assistance.status !== 'Assigned' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <!-- <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center;">{{ assistance.status }}</td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
                                 <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -405,12 +457,13 @@
                                 <td style="text-align: center;">{{ assistance.assRemarks }}</td>
                                 <td style="text-align: center;">{{ assistance.station }}</td>
                                 <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td>
-                                <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
-                                <!-- <td *ngIf="assistance.status !== 'Assigned' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <!-- <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center;">{{ assistance.status }}</td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
                                 <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -451,11 +504,13 @@
                                 <td style="text-align: center;">{{ assistance.assRemarks }}</td>
                                 <td style="text-align: center;">{{ assistance.station }}</td>
                                 <td style="text-align: center;">{{ assistance.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td>
-                                <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="assistance.status === 'In Progress' || assistance.status === 'Completed'" style="text-align: center;">{{ assistance.status }}</td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center;">{{ assistance.status }}</td>
+                                <!-- <td *ngIf="assistance.status === 'Assigned' || assistance.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_assistance, assistance)">Assign</button></td>
                                 <td *ngIf="assistance.status === 'In Progress'" style="text-align: center"><button type="submit" (click)="openModal_complete(template_complete_assistance, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="assistance.status === 'Completed' && assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="assistance.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, assistance)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>

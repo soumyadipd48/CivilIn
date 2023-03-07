@@ -21,7 +21,9 @@
         <section class='section_gradient' id='section_gradient'>
 
             <div class="loggedinUser">
-                <p>{{wish}}, {{currentUser}}!</p>
+                <!-- <p>{{wish}}, {{currentUser}}!</p> -->
+                <!-- <h5 *ngIf="currentUser==='grphq.control.room@gmail.com'">{{wish}}, HQ Control Room!</h5> -->
+                <p>{{wish}}, {{currentLoggedInUser}}!</p>
             </div>
             <div class="header_fixed_com">
 
@@ -237,6 +239,59 @@
                         </section>
                     </ng-template>
 
+                <!-- SHOW TABLE DATA FOR EVERY GRPS -->
+    
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='grphwh.control.room@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='hwh.srp@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedGRPSComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td style="text-align: center;">{{ complaint.status }}</td> -->
+                                <!-- <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal(template_new, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status !== 'Pending' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
+                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Accept</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedGRPSComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
                 <!-- SHOW TABLE DATA FOR CONTROL ROOM -->
     
                 <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphq.control.room@gmail.com'">
@@ -286,7 +341,8 @@
 
                 <!-- SHOW TABLE DATA FOR HOWRAH GRPS -->
     
-                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphwh.control.room@gmail.com'">
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphwh.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='hwh.srp@gmail.com'">
                     <table class="freeze-table" style="width:92.7%" id="myTable">
                         <thead>
                             <tr>
@@ -319,16 +375,18 @@
                                 <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
                                 <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
                                 <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
-                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
                                 <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <p *ngIf="selectedComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                    <p *ngIf="selectedHWHComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
                         No Records Found
                     </p>
                 </div>
@@ -368,16 +426,18 @@
                                 <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
                                 <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
                                 <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
-                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
                                 <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <p *ngIf="selectedComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                    <p *ngIf="selectedKGPComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
                         No Records Found
                     </p>
                 </div>
@@ -417,16 +477,18 @@
                                 <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
                                 <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
                                 <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
-                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
                                 <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <p *ngIf="selectedComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                    <p *ngIf="selectedSGUJComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
                         No Records Found
                     </p>
                 </div>
@@ -466,16 +528,18 @@
                                 <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
                                 <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
                                 <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
-                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
-                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
-                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
                                 <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
-                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                             </tr>
                         </tbody>
                     </table>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                    <p *ngIf="selectedComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                    <p *ngIf="selectedSDAHComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
                         No Records Found
                     </p>
                 </div>

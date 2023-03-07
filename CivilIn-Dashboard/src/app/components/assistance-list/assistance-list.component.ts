@@ -6,6 +6,8 @@ import { AssistanceService } from 'src/app/services/assistance.service';
 import { BsModalService, BsModalRef} from 'ngx-bootstrap/modal'
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+import { UserGRPS } from 'src/app/models/user-grps';
 
 @Component({
   selector: 'app-assistance-list',
@@ -15,14 +17,22 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class AssistanceListComponent implements OnInit {
 
   Assistance? : Assistance[];
+  userGRPS? : UserGRPS[];
   currentAssistance? : Assistance;
   currentIndex = -1;
+  currentLoggedInUser : string = '';
   selectedHead = '';
   selectedAssistance? : Assistance[];
+  selectedGRPSAssistance? : Assistance[];
+  selectedGRPSAssistanceTemp? : Assistance[];
   selectedHWHAssistance? : Assistance[];
+  selectedHWHAssistanceTemp? : Assistance[];
   selectedKGPAssistance? : Assistance[];
+  selectedKGPAssistanceTemp? : Assistance[];
   selectedSGUJAssistance? : Assistance[];
+  selectedSGUJAssistanceTemp? : Assistance[];
   selectedSDAHAssistance? : Assistance[];
+  selectedSDAHAssistanceTemp? : Assistance[];
   selectedGRP = '---Select---';
   selectedGRPS = '---Select---';
   selectedPriority = '---Select---';
@@ -62,6 +72,14 @@ export class AssistanceListComponent implements OnInit {
 
   count = 0;
 
+  dataNotify : any = {
+    'data':{
+      title : 'first notification',
+      body : 'Hello from Soumyadip'
+    },
+    'to': '/topics/howrah'   
+  };
+
   // ALL GRP names
   allGRP = [
     {
@@ -82,7 +100,7 @@ export class AssistanceListComponent implements OnInit {
     }
   ];
 
-  constructor(private assistanceService : AssistanceService, private titleService : Title, private modalService : BsModalService, private router: Router) { 
+  constructor(private assistanceService : AssistanceService, private titleService : Title, private modalService : BsModalService, private userService : UserService, private router: Router) { 
     this.titleService.setTitle("CivilIn-assistance-list");
 
     this.isLoggedIn();
@@ -92,6 +110,7 @@ export class AssistanceListComponent implements OnInit {
     setTimeout(()=>{
       this.loader=false;
     }, 2000);
+    this.retrieveUserGRPS();
     this.retrieveAssistance();
   }
 
@@ -99,6 +118,31 @@ export class AssistanceListComponent implements OnInit {
     this.currentAssistance = undefined;
     this.currentIndex = -1;
     this.retrieveAssistance();
+  }
+
+  public retrieveUserGRPS() : void {
+    this.userService.getAllUserGRPS().snapshotChanges().pipe(
+      map(changes => 
+        changes.map(c =>
+          ({ key : c.payload.key, ...c.payload.val()})
+        )
+      )
+    ).subscribe(data => {
+      this.userGRPS = data;
+      console.log(this.userGRPS);
+
+      this.userGRPS.forEach( (element) => {
+        var newEmailVar = element.grpsEmail;
+        var newNamevar = element.grpsName;
+        // console.log(newEmailVar);
+        // console.log(newNamevar);
+        if(newEmailVar === this.currentUser && newNamevar!= null)
+        {
+          this.currentLoggedInUser = newNamevar;
+          // console.log("currentLoggedInUser"+this.currentLoggedInUser);
+        }
+      })
+    })
   }
 
   public retrieveAssistance() : void {
@@ -110,22 +154,47 @@ export class AssistanceListComponent implements OnInit {
       )
     ).subscribe(data => {
       this.Assistance = data;
-      this.selectedAssistance = this.Assistance?.filter(
-        item => item.status === 'Pending'
-      );
+      
+
+      this.Assistance.forEach( (element) => {
+
+      var newGRPSNo : string;
+      GRPSList.forEach( (element1) => {
+        console.log("city"+element1.city);
+        console.log("currentLoggedInUser"+this.currentLoggedInUser);
+        if(this.currentLoggedInUser === element1.city && element1.id!=null)
+        {
+          newGRPSNo = element1.id;
+          console.log("inside newGRPSNo"+newGRPSNo);  
+        }
+        console.log("newGRPSNo"+newGRPSNo);
+      })
+
+      this.selectedGRPSAssistance = this.Assistance?.filter(
+        item => item.assignedGRPS === newGRPSNo
+      )
+      this.selectedGRPSAssistanceTemp = this.selectedGRPSAssistance;
       this.selectedHWHAssistance = this.Assistance?.filter(
         item => item.assignedGRP === 'HWH-GRP'
       )
+      this.selectedHWHAssistanceTemp = this.selectedHWHAssistance;
       this.selectedKGPAssistance = this.Assistance?.filter(
         item => item.assignedGRP === 'KGP-GRP'
       )
+      this.selectedKGPAssistanceTemp = this.selectedKGPAssistance;
       this.selectedSGUJAssistance = this.Assistance?.filter(
         item => item.assignedGRP === 'SGUJ-GRP'
       )
+      this.selectedSGUJAssistanceTemp = this.selectedSGUJAssistance;
       this.selectedSDAHAssistance = this.Assistance?.filter(
         item => item.assignedGRP === 'SDAH-GRP'
       )
+      this.selectedSDAHAssistanceTemp = this.selectedSDAHAssistance;
     })
+
+    this.selectedAssistance = this.Assistance?.filter(
+      item => item.status === 'Pending'
+    );
 
     // let objectsLen = 0;
     // for (let i = 0; i < this.selectedAssistance!.length; i++) {
@@ -139,27 +208,130 @@ export class AssistanceListComponent implements OnInit {
     // console.log(objectsLen);
 
     this.sortTimestamp(this.key);
-  }
+  })
+
+}
 
   public setActiveTutorial(assistance: Assistance, index: number): void {
     this.currentAssistance = assistance;
     this.currentIndex = index;
   }
 
-  public valueSelected(){
-    if(this.selectedHead === 'All')
-    {
-      this.selectedAssistance = this.Assistance;
-      console.log("else" + this.selectedAssistance);
-      console.log("Else selected head" + this.selectedHead);
+  //OLD method for value selected
+
+  // public valueSelected(){
+  //   if(this.selectedHead === 'All')
+  //   {
+  //     this.selectedAssistance = this.Assistance;
+  //     console.log("else" + this.selectedAssistance);
+  //     console.log("Else selected head" + this.selectedHead);
+  //   }
+  //   else
+  //   {
+  //     this.selectedAssistance = this.Assistance?.filter(
+  //       item => item.status === this.selectedHead
+  //     );
+  //     console.log("If" + this.selectedAssistance);
+  //     console.log("If selected head" + this.selectedHead);
+  //   }
+  // }
+
+    public valueSelected(){
+    if(this.currentUser === 'hwh.srp@gmail.com'){
+      if(this.selectedHead === 'All')
+      {
+        this.selectedHWHAssistance = this.selectedHWHAssistanceTemp;
+        console.log("else" + this.selectedHWHAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedHWHAssistance = this.selectedHWHAssistanceTemp?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedHWHAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
     }
-    else
-    {
-      this.selectedAssistance = this.Assistance?.filter(
-        item => item.status === this.selectedHead
-      );
-      console.log("If" + this.selectedAssistance);
-      console.log("If selected head" + this.selectedHead);
+    else if(this.currentUser === 'grpkgp.control.room@gmail.com'){
+      if(this.selectedHead === 'All')
+      {
+        this.selectedKGPAssistance = this.selectedKGPAssistanceTemp;
+        console.log("else" + this.selectedKGPAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedKGPAssistance = this.selectedKGPAssistanceTemp?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedKGPAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
+    }
+    else if(this.currentUser === 'grpsdah.control.room@gmail.com'){
+      if(this.selectedHead === 'All')
+      {
+        this.selectedSDAHAssistance = this.selectedSDAHAssistanceTemp;
+        console.log("else" + this.selectedSDAHAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedSDAHAssistance = this.selectedSDAHAssistanceTemp?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedSDAHAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
+    }
+    else if(this.currentUser === 'grpsguj.control.room@gmail.com'){
+      if(this.selectedHead === 'All')
+      {
+        this.selectedSGUJAssistance = this.selectedSGUJAssistanceTemp;
+        console.log("else" + this.selectedSGUJAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedSGUJAssistance = this.selectedSGUJAssistanceTemp?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedSGUJAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
+    }
+    else if(this.currentUser === 'grphq.control.room@gmail.com'){
+      if(this.selectedHead === 'All')
+      {
+        this.selectedAssistance = this.Assistance;
+        console.log("else" + this.selectedAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedAssistance = this.Assistance?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
+    }
+    else{
+      if(this.selectedHead === 'All')
+      {
+        this.selectedGRPSAssistance = this.selectedGRPSAssistanceTemp;
+        console.log("else" + this.selectedGRPSAssistance);
+        console.log("Else selected head" + this.selectedHead);
+      }
+      else
+      {
+        this.selectedGRPSAssistance = this.selectedGRPSAssistanceTemp?.filter(
+          item => item.status === this.selectedHead
+        );
+        console.log("If" + this.selectedGRPSAssistance);
+        console.log("If selected head" + this.selectedHead);
+      }
     }
   }
 
@@ -257,6 +429,31 @@ export class AssistanceListComponent implements OnInit {
         .then(() => this.message = 'The Assistance was updated successfully!')
         .catch(err => console.log(err));
     }
+
+    //notification code to send notification to each GRPS selected from dropdown
+
+    var tempGRPS : string;
+
+    GRPSList.forEach((element) => {
+      if(element.id === this.selectedGRPS)
+      {
+        tempGRPS = element.city.toLowerCase();
+        console.log("tempGRPS"+tempGRPS);
+      }
+    })
+
+    this.dataNotify = {
+      "data":{
+        title : 'New Notification',
+        body : 'New Assistance registered'
+      },
+      // 'to': '/topics/{{ tempGRPS }}'
+      "to": "/topics/"+tempGRPS!
+    };
+
+    this.assistanceService.sendNotification(this.dataNotify).subscribe((resp)=>{
+      console.log(resp);
+    });
 
     sessionStorage.removeItem('assistance_unId');
     this.selectedGRP = '';
