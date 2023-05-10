@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AssistanceListComponent } from './components/assistance-list/assistance-list.component';
 import { BaseComponent } from './components/base/base.component';
+import { ComplaintsListNewComponent } from './components/complaints-list-new/complaints-list-new.component';
 import { ComplaintsListComponent } from './components/complaints-list/complaints-list.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'navbar', component: NavbarComponent },
   //{ path: 'register', component: RegisterComponent },
   { path: 'complaints', component: ComplaintsListComponent, canActivate: [AuthGuard]  },
+  { path: 'complaintsNew', component: ComplaintsListNewComponent, canActivate: [AuthGuard]  },
   { path: 'assistance', component: AssistanceListComponent, canActivate: [AuthGuard]  },
   { path: 'home', component: HomeComponent },
   { path: 'logout', component: LogoutComponent },

@@ -29,6 +29,7 @@
     "bootstrap": "^5.2.3",
     "crypto-js": "^4.1.1",
     "font-awesome": "^4.7.0",
+    "ionicons": "^4.6.3",
     "jquery": "^3.6.1",
     "lodash": "^4.17.21",
     "ng2-order-pipe": "^0.1.5",

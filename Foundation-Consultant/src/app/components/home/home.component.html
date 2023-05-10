@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- <link href="style.css" rel="stylesheet"> -->
+  <title>Document</title>
+</head>
+
+<body>
+  <mat-toolbar color="primary" class="toolbar">
+    <span>FOUNDATION CONSULTANT</span>
+    <div class="container gray highlightTextIn">
+      <a alt="HOME">HOME</a>
+      <a alt="SERVICES">SERVICES</a>
+      <a alt="PROJECTS">PROJECTS</a>
+      <a alt="ABOUT US">ABOUT US</a>
+      <a alt="CAREER">CAREER</a>
+    </div>
+  </mat-toolbar>
+  <div class="hero_section">
+    <img src="https://images.unsplash.com/photo-1460627390041-532a28402358?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80">
+    <div class="top-left">Market leading</div>
+    <div class="top-left-new">Manufacturer</div>
+    <div class="top-left-new-below">We shape our buildings, thereafter they shape us....</div>
+  </div>
+  <div class="why_us_section">
+    <app-carousel [images]="images" [autoSlide]="true" [indicators]="true" [controls]="true"></app-carousel>
+  </div>
+  <!-- <section class="services">
+    <div class="containers text-center">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="round">
+              <div class="round-icon">
+                <i class="fa fa-car"></i>
+              </div>
+            </div>
+            <h2>Mining Service</h2>
+            <p>Mining service is one of the best work.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="round">
+              <div class="round-icon">
+                <i class="fa fa-refresh"></i>
+              </div>
+            </div>
+            <h2>finding Service</h2>
+            <p>finding service is one of the best work.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="round">
+              <div class="round-icon">
+                <i class="fa fa-phone"></i>
+              </div>
+            </div>
+            <h2>researching Service</h2>
+            <p>researching service is one of the best work.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <div class="card_design">
+    <div class="row">
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+          <a href="#!" class="btn btn-primary">Button</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+          <a href="#!" class="btn btn-primary">Button</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+          <a href="#!" class="btn btn-primary">Button</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+          <a href="#!" class="btn btn-primary">Button</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+          <a href="#!" class="btn btn-primary">Button</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="additional">
+          <div class="user-card">
+            <div class="level center">
+              Level 13
+            </div>
+            <div class="points center">
+              5,312 Points
+            </div>
+
+          </div>
+          <div class="more-info">
+            <h1>Jane Doe</h1>
+            <div class="coords">
+              <span>Group Name</span>
+              <span>Joined January 2019</span>
+            </div>
+            <div class="coords">
+              <span>Position/Role</span>
+              <span>City, Country</span>
+            </div>
+            <div class="stats">
+              <div>
+                <div class="title">Awards</div>
+                <i class="fa fa-trophy"></i>
+                <div class="value">2</div>
+              </div>
+              <div>
+                <div class="title">Matches</div>
+                <i class="fa fa-gamepad"></i>
+                <div class="value">27</div>
+              </div>
+              <div>
+                <div class="title">Pals</div>
+                <i class="fa fa-group"></i>
+                <div class="value">123</div>
+              </div>
+              <div>
+                <div class="title">Coffee</div>
+                <i class="fa fa-coffee"></i>
+                <div class="value infinity">∞</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="general">
+          <h1>Jane Doe</h1>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a volutpat mauris, at molestie lacus. Nam
+            vestibulum sodales odio ut pulvinar.</p>
+          <span class="more">Mouse over the card for more info</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card_design_new">
+    <div class="card_new">
+      <div class="card-image"></div>
+      <div class="card-text">
+        <span class="date">4 days ago</span>
+        <h2>Post One</h2>
+        <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt
+          eligendi dolor</p>
+      </div>
+    </div>
+    <div class="card_new">
+      <div class="card-image"></div>
+      <div class="card-text">
+        <span class="date">4 days ago</span>
+        <h2>Post Two</h2>
+        <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt
+          eligendi dolor</p>
+      </div>
+    </div>
+    <div class="card_new">
+      <div class="card-image"></div>
+      <div class="card-text">
+        <span class="date">4 days ago</span>
+        <h2>Post Three</h2>
+        <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt
+          eligendi dolor</p>
+      </div>
+    </div>
+  </div>
+  <section class="product">
+    <h2 class="product-category">Services</h2>
+    <button class="pre-btn"><img src="../../../assets/arrow.png" alt=""></button>
+    <button class="nxt-btn"><img src="../../../assets/arrow.png" alt=""></button>
+    <div class="product-container">
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <span class="discount-tag">50% off</span>
+          <img src="../../../assets/test.png" class="product-thumb" alt="">
+          <button class="card-btn">add to wishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-description">a short line about the cloth..</p>
+          <span class="price">$20</span><span class="actual-price">$40</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ng-image-slider [images]="imgCollection" #nav></ng-image-slider>
+</body>
+
+</html>

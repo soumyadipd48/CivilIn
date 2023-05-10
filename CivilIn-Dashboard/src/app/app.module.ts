@@ -35,7 +35,8 @@ import { Ng2OrderModule} from 'ng2-order-pipe';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { ModalModule} from 'ngx-bootstrap/modal'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpClientModule} from '@angular/common/http'
+import { HttpClientModule} from '@angular/common/http';
+import { ComplaintsListNewComponent } from './components/complaints-list-new/complaints-list-new.component'
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { HttpClientModule} from '@angular/common/http'
     LogoutComponent,
     VerifyEmailComponent,
     NavbarComponent,
-    BaseComponent
+    BaseComponent,
+    ComplaintsListNewComponent
   ],
   imports: [
     BrowserModule,
