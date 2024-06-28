@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivilIn-complaint-list</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem; margin-top: 400px;" role="status" *ngIf="loader">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-image" *ngIf="!loader">
+        <app-navbar></app-navbar>
+        <section class='section_gradient' id='section_gradient'>
+
+            <div class="loggedinUser">
+                <!-- <p>{{wish}}, {{currentUser}}!</p> -->
+                <!-- <h5 *ngIf="currentUser==='grphq.control.room@gmail.com'">{{wish}}, HQ Control Room!</h5> -->
+                <p>{{wish}}, {{currentLoggedInUser}}!</p>
+            </div>
+            <div class="header_fixed_com">
+
+                <!-- old html code for search and filter -->
+    
+                <!-- <div class="search-hero">
+                    <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+                        placeholder=" Start searching...">
+                </div>
+    
+                <select [(ngModel)]="selectedcomplaintType" (change)="valueSelected()" class="dropdown_select_com">
+                    <option>All</option>
+                    <option>Pending</option>
+                    <option>In Progress</option>
+                </select> -->
+
+                <div style="display: inline-block; width: 100%">
+                    <div class="search_control">
+                        <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+                            placeholder="Start searching...">
+                    </div>
+                    <div>
+                        <select [(ngModel)]="selectedcomplaintType" (change)="valueSelected()" class="dropdown_select_com">
+                            <option>All</option>
+                            <option>Pending</option>
+                            <option>Assigned</option>
+                            <option>In Progress</option>
+                            <option>Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Template for Assign task to GRP/GRPS -->
+
+                <!-- <ng-template #template id="template">
+                    <section class="step-wizard-new">
+                        <div class="clearfix">
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">Assign Complaint : {{ modalComplaint }}</h5>
+                            <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="#">
+                            <label for="GRP-names" style="margin-left: 10px;">Choose a GRP to assign: </label><br>
+                            <select name="GRP-names" id="GRP-names" style="margin-left: 10px;" [(ngModel)]="selectedGRP">
+                                <option value="HWH-GRP">HWH-GRP</option>
+                                <option value="KGP-GRP">KGP-GRP</option>
+                                <option value="SIL-GRP">SIL-GRP</option>
+                            </select><br>
+    
+                            <label for="Priority-names" style="margin-left: 10px;">Choose priority: </label><br>
+                            <select name="Priority-names" id="Priority-names" style="margin-left: 10px;" [(ngModel)]="selectedPriority">
+                                <option value="Critical">Critical</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select><br>
+                            <label for="remarks" style="margin-left: 10px;">Remarks(if Any): </label><br><br>
+                            <textarea id="remarks" name="remarks" rows="4" cols="50" style="margin-left: 10px; padding: 10px;" placeholder="Type your remarks.." [(ngModel)]="selectedRemarks"></textarea><br><br>
+                            <input type="submit" value="Submit" class="btn btn-primary float-start" (click)="updateComplaint()" style="padding: 5px; margin-bottom: 5px; margin-left: 5px;"/>
+                            <button type="button" class="btn btn-primary float-end" (click)="modalRef.hide()" style="padding: 5px; margin-bottom: 5px; margin-right: 5px;">
+                                Close
+                            </button>
+                        </form>
+                    </section>
+                </ng-template> -->
+
+                    <!-- Template 2 for Assign task to GRP/GRPS -->
+
+                    <ng-template #template_new id="template_new">
+                        <section class="step-wizard-new">
+                            <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="clearfix">
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 20px; margin-bottom: 10px;">Assign Complaint : {{ modalComplaint_complaintId }}</h5><br><br><br><hr>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; margin-bottom: 25px; font-size: 30px;">Complaint Description: <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_complaintDesc }}</h6></h5>
+                            </div>
+                            <!-- <form action="#"> -->
+                                <form [formGroup]="form">
+                                <label for="GRP-names" style="margin-left: 10px; font-weight: bold;">Choose a GRP to assign: </label><br>
+                                <select name="GRP-names" id="GRP-names" formControlName="GRP" (change)="checkFirstDropdown($any($event.target).value)" style="margin-left: 10px; margin-top: 10px; height: 35px; margin-bottom: 10px; min-width: 200px;" [(ngModel)]="selectedGRP">
+                                    <!-- <option [ngValue]="null" [disabled]="true">Select GRP</option> -->
+                                    <option *ngFor="let grp of allGRP" [value]="grp.id">
+                                        {{ grp.name }}
+                                    </option>
+                                </select>
+
+                                <br>
+                                <label for="GRPS-names" style="margin-left: 10px; font-weight: bold;">Choose a GRPS to assign: </label><br>
+                                <select name="GRPS-names" id="GRPS-names" formControlName="GRPS" style="margin-left: 10px; margin-top: 10px; height: 35px; margin-bottom: 10px; min-width: 200px; text-align: center;" [(ngModel)]="selectedGRPS">
+                                    <option *ngFor="let grps of allGRPS" [value]="grps.id">
+                                        {{ grps.city }}
+                                    </option>
+                                </select>
+                                </form>
+        
+                                <label for="Priority-names" style="margin-left: 10px; font-weight: bold;">Choose priority: </label><br>
+                                <select name="Priority-names" id="Priority-names" style="margin-left: 10px; margin-top: 10px; height: 35px; margin-bottom: 10px; min-width: 200px;" [(ngModel)]="selectedPriority">
+                                    <option value="Critical">Critical</option>
+                                    <option value="High">High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select><br>
+                                <label for="remarks" style="margin-left: 10px; font-weight: bold;">Remarks: </label><br>
+                                <textarea id="remarks" name="remarks" rows="4" cols="50" style="margin-left: 10px; padding: 10px; margin-top: 10px;" placeholder="Type your remarks.." [(ngModel)]="selectedRemarks"></textarea><br><br>
+                                <input type="submit" value="Submit" class="btn btn-primary float-start" (click)="updateComplaint()" style="padding: 5px; margin-bottom: 10px; margin-left: 10px;"/>
+                                <button type="button" class="btn btn-primary float-end" (click)="modalRef.hide()" style="padding: 5px; margin-bottom: 10px; margin-right: 10px;">
+                                    Close
+                                </button>
+                            <!-- </form> -->
+                        </section>
+                    </ng-template>
+
+                    <!-- template for step progress bar new code-->
+
+                    <ng-template #template_progress_new id="template_progress_new">
+                        <section class="step-wizard">
+                            <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="clearfix">
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 10px;">Complaint Id: {{ modalComplaint_progress_unId }}</h5><br><br><hr>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Status of Complaint : {{ modalComplaint_progress_status }}</h5>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Complaint assigned to : {{ modalComplaint_progress_assignedToGRP }}</h5>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 20px; font-size: 30px;  font-size: 30px;">Complaint Description : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_complaintDesc }}</h6></h5>
+                                <h5 *ngIf="orderStatus==='Completed'" class="modal-title float-start" style="margin-left: 10px; margin-top: 20px; font-size: 30px;">Remarks After Completion : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_remarks_after_completion }}</h6></h5>
+                                <h5 *ngIf="orderStatus!=='Completed'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; font-size: 30px;">Remarks from HQ : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_remarks }}</h6></h5>
+                                <h5 *ngIf="orderPriority==='Critical'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: red;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='High'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: rgb(185, 136, 45);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='Medium'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: rgb(163, 163, 30);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='Low'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: green;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            </div><br>
+    
+                            <!-- step progress bar new code-->
+    
+                            <div class="progress_bar">
+                                <span *ngFor="let item of counts; let i = index">
+                                  <span class="circles" [class.active]="orderStatus == item"></span>
+                                  <span class="bar" *ngIf="(i != counts.length-1)"></span>
+                                </span>
+                            </div>
+    
+                            <div style="margin-left: 50px;">
+                                <div class="display_desc" *ngFor="let item of counts">
+                                    <span [class.circle-desc-active]="orderStatus == item">{{ item }}</span>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary" (click)="modalRef.hide()" style="padding: 5px; margin-top: 40px; margin-bottom: 5px; margin-left: 225px;">
+                                Close
+                            </button>
+                        </section>
+                    </ng-template>
+
+                    <!-- Template for accept complaint -->
+
+                    <ng-template #template_accept_complaints id="template_accept_complaints">
+                        <section class="step-wizard">
+                            <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="clearfix">
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Complaint Id: {{ modalComplaint_progress_unId }}</h5><br><br><hr>
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; font-size: 30px;">Complaint Description : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_complaintDesc }}</h6></h5>
+                            <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; font-size: 30px;">Remarks from HQ : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_remarks }}</h6></h5>
+                            <h5 *ngIf="orderPriority==='Critical'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: red;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            <h5 *ngIf="orderPriority==='High'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: rgb(185, 136, 45);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            <h5 *ngIf="orderPriority==='Medium'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: rgb(163, 163, 30);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            <h5 *ngIf="orderPriority==='Low'" class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; color: green;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            </div><br>
+                            <input type="submit" value="Accept" class="btn btn-primary float-start" (click)="acceptComplaint()" style="padding: 5px; margin-bottom: 10px; margin-left: 45%;"/>
+                        </section>
+                    </ng-template>
+
+                    <!-- Template for complete Assistance -->
+
+                    <ng-template #template_complete_complaint id="template_complete_complaint">
+                        <section class="step-wizard">
+                            <button type="button" class="close float-end" area-label="Close" (click)="modalRef.hide()" style="margin-right: 10px; margin-top: 10px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="clearfix">
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px;">Assistance Id : {{ modalComplaint_progress_unId }}</h5><br><br><hr>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; font-size: 30px;">Complaint Description : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_complaintDesc }}</h6></h5>
+                                <h5 class="modal-title float-start" style="margin-left: 10px; margin-top: 5px; font-size: 30px;">Remarks from HQ : <h6 style="font-style: italic; margin-top: 5px;">{{ modalComplaint_remarks }}</h6></h5>
+                                <h5 *ngIf="orderPriority==='Critical'" class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; color: red;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='High'" class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; color: rgb(185, 136, 45);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='Medium'" class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; color: rgb(163, 163, 30);">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                                <h5 *ngIf="orderPriority==='Low'" class="modal-title float-start" style="margin-left: 10px; margin-top: 10px; color: green;">Priority of Complaint : {{ modalComplaint_progress_priority }}</h5>
+                            </div><br>
+
+                            <!-- step progress bar new code-->
+
+                            <div class="progress_bar">
+                                <span *ngFor="let item of counts; let i = index">
+                                    <span class="circles" [class.active]="orderStatus == item"></span>
+                                    <span class="bar" *ngIf="(i != counts.length-1)"></span>
+                                </span>
+                            </div>
+                            
+                            <div style="margin-left: 50px; margin-bottom: 20px;">
+                                <div class="display_desc" *ngFor="let item of counts">
+                                    <span [class.circle-desc-active]="orderStatus == item">{{ item }}</span>
+                                </div>
+                            </div>
+
+                            <label for="remarksCompleted" style="margin-left: 10px; font-size: 30px;">Remarks for Completion : </label><br>
+                            <textarea id="remarksCompleted" name="remarksCompleted" rows="4" cols="60" style="margin-left: 10px; padding: 10px; margin-top: 10px; max-width: 95%;" placeholder="Type your remarks for completion" [(ngModel)]="selectedRemarksCompleted"></textarea><br><br>
+
+                            <input type="submit" value="Complete" class="btn btn-primary float-start" (click)="completeComplaint()" style="padding: 5px; margin-bottom: 10px; margin-left: 40%;"/>
+
+                        </section>
+                    </ng-template>
+
+                <!-- SHOW TABLE DATA FOR EVERY GRPS -->
+    
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='grphwh.control.room@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser!=='grphq.control.room@gmail.com' && currentUser!=='hwh.srp@gmail.com' && currentUser!=='grpkgp.control.room@gmail.com' && currentUser!=='grpsdah.control.room@gmail.com' && currentUser!=='grpsguj.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedGRPSComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td style="text-align: center;">{{ complaint.status }}</td> -->
+                                <!-- <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal(template_new, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status !== 'Pending' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
+                                <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Accept</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedGRPSComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
+                <!-- SHOW TABLE DATA FOR CONTROL ROOM -->
+    
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphq.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <td style="text-align: center;">{{ complaint.status }}</td>
+                                <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal(template_new, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status !== 'Pending' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
+                <!-- SHOW TABLE DATA FOR HOWRAH GRPS -->
+    
+                <!-- <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grphwh.control.room@gmail.com'"> -->
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='hwh.srp@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedHWHComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedHWHComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
+                <!-- SHOW TABLE DATA FOR KHARAGPUR GRPS -->
+    
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grpkgp.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedKGPComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedKGPComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
+                <!-- SHOW TABLE DATA FOR SILIGURI GRPS -->
+    
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grpsguj.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedSGUJComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedSGUJComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+
+                <!-- SHOW TABLE DATA FOR SEALDAH GRPS -->
+    
+                <div style="width: 100%; height: 92%; overflow: auto;" *ngIf="currentUser==='grpsdah.control.room@gmail.com'">
+                    <table class="freeze-table" style="width:92.7%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th (click)="sort('complaintUnId')" style="min-width: 75px; width: 75px; text-align: center;">
+                                    Complaint Id&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userName')" style="min-width: 100px; width:100px; text-align: center;">
+                                    User Name&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintHead')" style="min-width: 110px; width:110px; text-align: center;">Complaint Head&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('complaintType')" style="min-width: 110px; width:110px; text-align: center;">Complaint Type&nbsp;<i class="fa fa-sort"></i></th>
+                                <!-- <th style="min-width: 250px; width:250px; text-align: center;">Complaint Brief</th> -->
+                                <th (click)="sort('trainType')" style="min-width: 70px; width:70px; text-align: center;">Train&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('userPhone')" style="min-width: 65px; width: 65px; text-align: center;">User Phone&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('timestamp')" style="min-width: 75px; width: 75px; text-align: center;">Timestamp&nbsp;<i class="fa fa-sort"></i></th>
+                                <th (click)="sort('status')" style="min-width: 75px; width: 75px; text-align: center;">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                <th style="min-width: 75px; width: 75px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let complaint of selectedSDAHComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
+                                <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
+                                <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
+                                <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                                <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                                <td style="text-align: center;">{{ complaint.complaintType }}</td>                                
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.stn_starting }} - {{ complaint.stn_ending }}</td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;">{{ complaint.trainType }} -> {{ complaint.mailTrainNo }}</td>
+                                <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                                <td style="text-align: center;">{{ complaint.complaintByPhone }}</td>
+                                <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                                <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center;">{{ complaint.status }}</td>
+                                <!-- <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal_afterAssigned(template_accept_complaints, complaint)">Assign</button></td>
+                                <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" (click)="openModal_complete(template_complete_complaint, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
+                                <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
+                                <td *ngIf="complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <p *ngIf="selectedSDAHComplaint?.length === 0" style="margin-left: 600px; margin-top: 100px;">
+                        No Records Found
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>   
+
+</body>
+
+</html>

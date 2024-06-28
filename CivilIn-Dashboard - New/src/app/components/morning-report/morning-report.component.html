@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning-Report</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body>
+
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+          <div class="modal-content-print" id="print-section">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Preview Morning Report</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Name of the GRP Dist.</th>
+                    <th scope="col">Total Cases with FIR</th>
+                    <th scope="col">Total Preventive Arrest</th>
+                    <th scope="col">Total Specific Arrest</th>
+                    <th scope="col">Total Arrest</th>
+                    <th scope="col">Seizer or Recovery</th>
+                    <th scope="col">Total U/D</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Howrah GRP</th>
+                    <td>{{ noOfFIRHowrah }}</td>
+                    <td>{{ noOfPreventiveCasesHowrah }}</td>
+                    <td>{{ noOfSpecificCasesHowrah }}</td>
+                    <td>{{ noOfCasesHowrah }}</td>
+                    <td>{{ noOfSeizureTotalHowrah }}</td>
+                    <td>{{ noOfUDHowrah }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Sealdah GRP</th>
+                    <td>{{ noOfFIRSealdah }}</td>
+                    <td>{{ noOfPreventiveCasesSealdah }}</td>
+                    <td>{{ noOfSpecificCasesSealdah }}</td>
+                    <td>{{ noOfCasesSealdah }}</td>
+                    <td>{{ noOfSeizureSealdah }}</td>
+                    <td>{{ noOfUDSealdah }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Siliguri GRP</th>
+                    <td>{{ noOfFIRSiliguri }}</td>
+                    <td>{{ noOfPreventiveCasesSiliguri }}</td>
+                    <td>{{ noOfSpecificCasesSiliguri }}</td>
+                    <td>{{ noOfCasesSiliguri }}</td>
+                    <td>{{ noOfSeizureSiliguri }}</td>
+                    <td>{{ noOfUDSiliguri }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Kharagpur GRP</th>
+                    <td>{{ noOfFIRKharagpur }}</td>
+                    <td>{{ noOfPreventiveCasesKharagpur }}</td>
+                    <td>{{ noOfSpecificCasesKharagpur }}</td>
+                    <td>{{ noOfCasesKharagpur }}</td>
+                    <td>{{ noOfSeizureTotalKharagpur }}</td>
+                    <td>{{ noOfUDKharagpur }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Grand Total</th>
+                    <td>{{ totalFIRCases }}</td>
+                    <td>{{ totalPreventiveCases }}</td>
+                    <td>{{ totalSpecificCases }}</td>
+                    <td>{{ totalCases }}</td>
+                    <td>{{ totalSeizureCases }}</td>
+                    <td>{{ totalUDCases }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="fir_gist">
+              <h4>Total Case : {{ totalFIRCases }}</h4>
+              <h4>Howrah GRP : </h4>
+              <p>{{ detailsFIRHowrah }}</p>
+              <h4>Sealdah GRP : </h4>
+              <p>{{ detailsFIRSealdah }}</p>
+              <h4>Siliguri GRP : </h4>
+              <p>{{ detailsFIRSiliguri }}</p>
+              <h4>Kharagpur GRP : </h4>
+              <p>{{ detailsFIRKharagpur }}</p>
+            </div>
+          </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary button-34" styleSheetFile="assets/css/custom1.css" printSectionId="print-section" ngxPrint>Print</button>
+              <div class="dropdown">
+                <button class="dropbtn button-36">Reset</button>
+                <div class="dropdown-content">
+                  <a href="#" (click)="reset('Howrah')">Reset Howrah</a>
+                  <a href="#" (click)="reset('Sealdah')">Reset Sealdah</a>
+                  <a href="#" (click)="reset('Siliguri')">Reset Siliguri</a>
+                  <a href="#" (click)="reset('Kharagpur')">Reset Kharagpur</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-danger button-35" data-bs-dismiss="#myModal" (click)="closeModalNew()">Close</button>
+            </div>
+
+        </div>
+    </div>
+  </div>
+  <!-- =============== Navigation ================ -->
+ <div class="container">
+  <div [ngClass]="status ? 'active' : ''" class="navigation" id="navigation">
+      <ul>
+          <li>
+              <a href="#">
+                  <span class="icon">
+                    <i><img src="../../../assets/civilin_logo.png" style="height: 30px; width: 30px; position: relative; top: -8px"></i>
+                  </span>
+                  <span class="title">CivilIn-Dashboard</span>
+              </a>
+          </li>
+          <!-- <li>
+              <a href="#">
+                  <span class="icon">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                  </span>
+                  <span class="title">Dashboard</span>
+              </a>
+          </li> -->
+          <li>
+              <a href="complaintsNew">
+                  <span class="icon">
+                    <i><img src="..//..//../assets/complain.png" style="height: 35px; width: 35px; position: relative; left: 5px; bottom: 5px;"></i>
+                  </span>
+                  <span class="title">Complaints</span>
+              </a>
+          </li>
+          <li>
+              <a href="assistanceNew">
+                  <span class="icon">
+                    <i><img src="..//..//../assets/call-center.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                  </span>
+                  <span class="title">Assistances</span>
+              </a>
+          </li>
+          <li>
+              <a href="GRPS">
+                  <span class="icon">
+                    <i><img src="..//..//../assets/list.png" style="height: 35px; width: 30px; position: relative; bottom: 5px;"></i>
+                  </span>
+                  <span class="title">GRPS List</span>
+              </a>
+          </li>
+          <!-- <li>
+              <a href="#">
+                  <span class="icon">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                  </span>
+                  <span class="title">All Users</span>
+              </a>
+          </li> -->
+          <li>
+              <a href="morning-report">
+                  <span class="icon">
+                    <i><img src="..//..//../assets/report.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                  </span>
+                  <span class="title">Morning Report</span>
+              </a>
+          </li>
+          <li>
+              <a href="logout">
+                  <span class="icon">
+                    <i><img src="..//..//../assets/log-out.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                  </span>
+                  <span class="title">Sign Out</span>
+              </a>
+          </li>
+      </ul>
+  </div>
+  <!-- ========================= Main ==================== -->
+  <div [ngClass]="status ? 'active' : ''" class="main" id="main">
+    <div class="topbar">
+        <div class="toggle" (click)="addToggle()">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </div>
+        <!-- <div class="search">
+            <label>
+                <input type="text" placeholder="Search here">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </label>
+        </div> -->
+        <div class="user">
+            <img src="assets/user.png" alt="">
+        </div>
+    </div>
+    
+    <h1 class="heading">Morning Report</h1>
+
+    <div class="text_input">
+      <label for="myFileInput">To select a file click on the button : </label>
+      <input type="file" (change)="changeListener($event)" #myFileInput name="myFileInput" id="myFileInput">
+      <!-- <img src="../../../assets/add.png" (change)="changeListener($event)" style="height: 25px; width: 25px;"> -->
+    </div>
+    
+    <div class="file_preview">
+      <h3>File Content Preview : </h3>
+      <pre> {{fileContent}} </pre>
+    </div>
+
+    <button type="button" class="btn btn-primary preview" (click)="openPreviewModal()" [disabled]="disableButton">Preview</button>
+    <!-- <button (click)="printThisPage()">Print</button> -->
+
+  </div>
+</div>
+</body>
+</html>

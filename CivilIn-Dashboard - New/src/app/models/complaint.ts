@@ -1,0 +1,33 @@
+export class Complaint {
+    key?: string | null;
+    complaintBrief? : string;
+    complaintByName? : string;
+    complaintByPhone? : string;
+    complaintFor? : string;
+    complaintHead? : string;
+    complaintId? : string;
+    complaintType? : string;
+    complaintUnId? : number | null;
+    lat? : number;
+    lng? : number;
+    status? : string;
+    stn_details? : string;
+    stn_details_name? : string;
+    timestamp?: number;
+    // trainPnr? : number;
+    trainPnr? : string;
+    stn_starting? : string;
+    stn_ending? : string;
+    mailTrainNo? : string;
+    trainType? : string;
+    type? : string;
+    userId? : string;
+    userName? : string;
+    userPhone? : string;
+    priority?: string;
+    assignedGRP? : string;
+    assignedGRPs? : string;
+    remarks? : string;
+    modalComplaint_remarks? : string;
+    isNewctrlrm? : any;
+}
