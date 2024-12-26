@@ -1,8 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import * as firebase1 from 'firebase/compat/app';
 import { map } from 'rxjs/operators';
+import * as ExcelJS from 'exceljs';
+import * as FileSaver from 'file-saver';
 import { Complaint } from 'src/app/models/complaint';
 import { UserGRPS } from 'src/app/models/user-grps';
 import { ComplaintService } from 'src/app/services/complaint.service';
@@ -21,8 +25,10 @@ export class ComplaintsListNewComponent implements OnInit {
   currentComplaint? : Complaint;
   currentIndex = -1;
   currentLoggedInUser : string = '';
-  selectedcomplaintType = '';
+  selectedcomplaintType : string = 'Pending';
   selectedComplaint? : Complaint[];
+  selectedComplaintLocal? : Complaint[];
+  selectedComplaintNonLocal? : Complaint[];
   selectedGRPSComplaint? : Complaint[];
   selectedGRPSComplaintTemp? : Complaint[];
   selectedHWHComplaint? : Complaint[];
@@ -45,6 +51,14 @@ export class ComplaintsListNewComponent implements OnInit {
   modalRef!: BsModalRef;
   selectedRemarksCompleted = '';
   modalComplaint_complaintId? : String = '';
+  modalComplaint_AssignedGRP? : String = '';
+  modalComplaint_AssignedGRPs? : String = '';
+  modalComplaint_TrainType? : String = '';
+  modalComplaint_TrainNo? : String = '';
+  modalComplaint_CoachNo? : String = '';
+  modalComplaint_SeatNo? : String = '';
+  modalComplaint_stn_starting? : String = '';
+  modalComplaint_stn_ending? : String = '';
   modalComplaint_remarks? : String = '';
   modalComplaint_complaintDesc? : String = '';
   modalComplaint_progress_unId? : String = '';
@@ -60,7 +74,27 @@ export class ComplaintsListNewComponent implements OnInit {
   curHr = this.today.getHours();
   wish : string = '';
   orderPriority? = '';
-
+  complaint_count_all = 0;
+  complaint_count_daily = 0;
+  complaint_count_yesterday = 0;
+  complaint_count_current_month = 0;
+  complaint_count_previous_month = 0;
+  complaint_count_month_compare = 0;
+  complaint_count_daily_compare = 0;
+  complaint_count_pending_daily = 0;
+  complaint_count_pending_daily_array? : Complaint[];
+  complaint_count_pending = 0;
+  complaint_count_pending_array? : Complaint[];
+  complaint_count_progress_daily = 0;
+  complaint_count_progress_daily_array? : Complaint[];
+  complaint_count_progress = 0;
+  complaint_count_progress_array? : Complaint[];
+  complaint_count_completed_daily = 0;
+  complaint_count_completed_daily_array? : Complaint[];
+  complaint_count_completed = 0;
+  complaint_count_completed_array? : Complaint[];
+  complaint_comparsion_msg : string = '';
+  complaint_comparison_msg_daily : string = '';
   // ALL GRP names
   allGRP = [
     {
@@ -1075,8 +1109,8 @@ export class ComplaintsListNewComponent implements OnInit {
     "13146 - Kolkata Rdp Exp.",
     "13064 - Howrah Exp.",
     "13162 - Tebhaga Exp.",
-    "13012 - Howrah – Intercity Exp.",
-    "13466 - Howrah – Intercity Exp.",
+    "13012 - Howrah - Intercity Exp.",
+    "13466 - Howrah - Intercity Exp.",
     "13154 - Gour Exp.",
     "14003 - New Delhi Exp.",
     "13409 - Kiul Intercity Exp.",
@@ -1228,7 +1262,7 @@ export class ComplaintsListNewComponent implements OnInit {
     "12768 - Huzur Sahib Nanded Express",
     "22855 - Tirupati Weekly Express",
     "20822 - Humsafar Exp",
-    "22807 - Santragachi –Chennai AC Exp",
+    "22807 - Santragachi Chennai AC Exp",
     "22170 - Rani Kamalapati Humsafar Exp",
     "12950 - Kabi Guru Exp",
     "22841 - Antaday Exp.",
@@ -1371,7 +1405,7 @@ export class ComplaintsListNewComponent implements OnInit {
   public counts = ["Recieved","Assigned","In Progress","Completed"];
   orderStatus?  = "";
 
-  constructor(private complaintService : ComplaintService, private titleService : Title, private modalService : BsModalService, private userService : UserService,) {
+  constructor(private complaintService : ComplaintService, private titleService : Title, private modalService : BsModalService, private userService : UserService, private datePipe : DatePipe) {
     this.titleService.setTitle("CivilIn-complaints-list");
 
     this.isLoggedIn();
@@ -1432,48 +1466,83 @@ export class ComplaintsListNewComponent implements OnInit {
     ).subscribe(data => {
       this.Complaints = data;
 
-      // convert stn_details to station name
-
       this.Complaints.forEach( (element) => {
         // console.log("stn_details " + element.stn_details);
-        const n = element.stn_details;
+        const n = String(element.stn_details);
         // console.log("stn_details--->n " + n);
         
-        element.stn_details_name = this.stn[n!];
+        element.stn_details_name = n;
 
         // console.log("element.stn_details_name " + element.stn_details_name);
       })
 
+      // this.complaint_count_pending_daily = this.Complaints.filter(
+      //   item => item.status === 'Pending'
+      // )
+      this.complaint_count_pending_array = this.Complaints.filter(
+        item => item.status === 'Pending'
+      )
+      this.complaint_count_progress_array = this.Complaints.filter(
+        item => item.status === 'In Progress'
+      )
+      this.complaint_count_completed_array = this.Complaints.filter(
+        item => item.status === 'Completed'
+      )
+
+      this.complaint_count_all = this.Complaints.length;
+      this.complaint_count_pending = this.complaint_count_pending_array.length;
+      this.complaint_count_progress = this.complaint_count_progress_array.length;
+      this.complaint_count_completed = this.complaint_count_completed_array.length;
+
+      console.log("complaint count"+this.Complaints.length);
+
+      // convert stn_details to station name
+
+      // this.Complaints.forEach( (element) => {
+
+      //   const n = element.stn_details;
+        
+      //   element.stn_details_name = this.stn[n!];
+      // })
+
       // convert trainPnr to station names
 
       this.Complaints.forEach( (element) => {
-        var newarr = element.trainPnr!.split("|");
-        const n1 = Number(newarr[0]);
-        const n2 = Number(newarr[1]);
-        // console.log("n1 "+n1 + "n2 " + n2);
-        element.mailTrainNo = this.mail_trn[n1!];
-        element.stn_starting = this.stn[n1!];
-        element.stn_ending = this.stn[n2!];
-        //console.log("element.mailTrainNo"+element.mailTrainNo);
-        // console.log("element.stn_starting"+element.stn_starting);
-        // console.log("element.stn_ending"+element.stn_ending);
+        if(element.trainType == 'Local'){
+          var newarr = element.trainPnr!.split("|");
+          element.stn_starting = newarr[0];
+          element.stn_ending = newarr[1];
+        }
+        else{
+          console.log("element : "+JSON.stringify(element));
+          var newarr = element.trainPnr!.split("|");
+          element.mailTrainNo = newarr[0];
+          element.stn_starting = newarr[1];
+          element.stn_ending = newarr[2];
+        }
 
         var newGRPSNo : string;
+        var newGRPSName : string;
         GRPSList.forEach( (element1) => {
-          console.log("city"+element1.city);
-          console.log("currentLoggedInUser"+this.currentLoggedInUser);
+          // console.log("city"+element1.city);
+          // console.log("currentLoggedInUser"+this.currentLoggedInUser);
           if(this.currentLoggedInUser === element1.city && element1.id!=null)
           {
             newGRPSNo = element1.id;
+            newGRPSName = element1.city;
             console.log("inside newGRPSNo"+newGRPSNo);  
+            console.log("inside newGRPSName"+newGRPSName);  
           }
-          console.log("newGRPSNo"+newGRPSNo);
+          //console.log("newGRPSNo"+newGRPSNo);
+          //console.log("newGRPSName"+newGRPSName);  
         })
 
-        this.selectedGRPSComplaint = this.Complaints?.filter(
-          item => item.assignedGRPS === newGRPSNo
-        )
-
+        if(newGRPSName!){
+          this.selectedGRPSComplaint = this.Complaints?.filter(
+            item => item.assignedGRPs === newGRPSName
+          )
+          this.selectedGRPSComplaintTemp = this.selectedGRPSComplaint;
+        }
         this.selectedHWHComplaint = this.Complaints?.filter(
           item => item.assignedGRP === 'HWH-GRP'
         )
@@ -1495,6 +1564,103 @@ export class ComplaintsListNewComponent implements OnInit {
       this.selectedComplaint = this.Complaints?.filter(
         item => item.status === 'Pending'
       );
+
+      this.selectedComplaintLocal = this.selectedComplaint?.filter(
+        item => item.trainType == 'Local'
+      );
+      this.selectedComplaintNonLocal = this.selectedComplaint?.filter(
+        item => item.trainType == 'Non-Local'
+      );
+
+      this.Complaints.forEach( (element) => {
+
+        let strang : any = element.timestamp!*1000;
+        let newDate = new Date(strang);
+        let newDateNew = this.datePipe.transform(newDate.toDateString(),'dd-MM-yyyy HH:mm:ss');
+        console.log("newdate : " + newDateNew);
+        let year = newDate.getFullYear();
+        console.log("year: " + year);
+        let month = newDate.getMonth()+1;
+        console.log("month : " + month);
+        let day = newDate.getDate();
+        console.log("day: " + day);
+        let today = new Date();
+        console.log("today: " + today);
+        let todayDate = today.getDate();
+        console.log("today date: " + todayDate);
+        let yesterdayDate = today.getDate()-1;
+        console.log("yesterday date: " + yesterdayDate);
+        let todayMonth = today.getMonth()+1;
+        console.log("today month: " + todayMonth);
+        let previousMonth = today.getMonth();
+        console.log("previous month: " + previousMonth);
+        let todayYear = today.getFullYear();
+        console.log("today year: " + todayYear);
+        if(month==todayMonth && day==todayDate && year==todayYear){
+          this.complaint_count_daily = this.complaint_count_daily+1;
+          if(element.status === 'Pending'){
+            this.complaint_count_pending_daily = this.complaint_count_pending_daily+1;
+          }
+          if(element.status === 'In-Progress'){
+            this.complaint_count_progress_daily = this.complaint_count_progress_daily+1;
+          }
+          if(element.status === 'Completed'){
+            this.complaint_count_completed_daily = this.complaint_count_completed_daily+1;
+          }
+        }
+        console.log(this.complaint_count_daily + " daily count");
+        if(month==todayMonth && day==yesterdayDate && year==todayYear){
+          this.complaint_count_yesterday = this.complaint_count_yesterday+1;
+        }
+        console.log(this.complaint_count_yesterday + " yesterday count");
+        if(this.complaint_count_daily>this.complaint_count_yesterday)
+        {
+          this.complaint_count_daily_compare = (((this.complaint_count_daily-this.complaint_count_yesterday)/this.complaint_count_yesterday)*100);
+          console.log("Comparison daily : "+this.complaint_count_daily_compare);
+          this.complaint_comparison_msg_daily = 'increased';
+        }
+        if(this.complaint_count_yesterday>this.complaint_count_daily)
+        {
+          this.complaint_count_daily_compare = (((this.complaint_count_yesterday-this.complaint_count_yesterday)/this.complaint_count_yesterday)*100);
+          console.log("Comparison daily : "+this.complaint_count_daily_compare);
+          this.complaint_comparison_msg_daily = 'decreased';
+        }
+        if(this.complaint_count_yesterday == this.complaint_count_daily){
+          this.complaint_count_daily_compare = 0;
+          console.log("Comparison daily : "+this.complaint_count_daily_compare);
+          this.complaint_comparison_msg_daily = 'increased';
+        }
+        if(month==todayMonth && year==todayYear){
+          this.complaint_count_current_month = this.complaint_count_current_month+1;
+        }
+        console.log(this.complaint_count_current_month + " current month count");
+        if(month==previousMonth && year==todayYear){
+          this.complaint_count_previous_month = this.complaint_count_previous_month+1;
+        }
+        console.log(this.complaint_count_previous_month + " previous month count");
+        if(this.complaint_count_current_month>this.complaint_count_previous_month)
+        {
+          this.complaint_count_month_compare = (((this.complaint_count_current_month-this.complaint_count_previous_month)/this.complaint_count_previous_month)*100);
+          console.log("Comparison monthly : "+this.complaint_count_month_compare);
+          this.complaint_comparsion_msg = 'increased';
+        }
+        if(this.complaint_count_previous_month>this.complaint_count_current_month)
+        {
+          this.complaint_count_month_compare = (((this.complaint_count_previous_month-this.complaint_count_current_month)/this.complaint_count_previous_month)*100);
+          console.log("Comparison monthly : "+this.complaint_count_month_compare);
+          this.complaint_comparsion_msg = 'decreased';
+        }
+        if(this.complaint_count_current_month == this.complaint_count_previous_month)
+        {
+          this.complaint_count_month_compare = 0;
+          console.log("Comparison monthly : "+this.complaint_count_month_compare);
+          this.complaint_comparsion_msg = 'increased';
+        }
+      });
+
+      console.log("complaint_count_pending_daily : " + this.complaint_count_pending_daily);
+      console.log("complaint_count_progress_daily : " + this.complaint_count_progress_daily);
+      console.log("complaint_count_completed_daily : " + this.complaint_count_completed_daily);
     
       // by default recent complaint will show
       
@@ -1592,6 +1758,12 @@ export class ComplaintsListNewComponent implements OnInit {
         this.selectedComplaint = this.Complaints;
         console.log("else" + this.selectedComplaint);
         console.log("Else selected head" + this.selectedcomplaintType);
+        this.selectedComplaintLocal = this.selectedComplaint?.filter(
+          item => item.trainType == 'Local'
+        );
+        this.selectedComplaintNonLocal = this.selectedComplaint?.filter(
+          item => item.trainType == 'Non-Local'
+        );
       }
       else
       {
@@ -1600,6 +1772,12 @@ export class ComplaintsListNewComponent implements OnInit {
         );
         console.log("If" + this.selectedComplaint);
         console.log("If selected head" + this.selectedcomplaintType);
+        this.selectedComplaintLocal = this.selectedComplaint?.filter(
+          item => item.trainType == 'Local'
+        );
+        this.selectedComplaintNonLocal = this.selectedComplaint?.filter(
+          item => item.trainType == 'Non-Local'
+        );
       }
     }
     else{
@@ -1744,6 +1922,22 @@ export class ComplaintsListNewComponent implements OnInit {
     this.modalService.hide();
   }
 
+  public notifyComplaint(complaint : Complaint) : void {
+    const assignedGRPs = complaint.assignedGRPs?.toLowerCase();
+    console.log("assignedGRPs"+assignedGRPs);
+    this.dataNotify = {
+      "data":{
+        title : 'New Notification',
+        body : 'New Complaint registered! Please check.'
+      },
+      // 'to': '/topics/{{ tempGRPS }}'
+      "to": "/topics/"+assignedGRPs!
+    };
+    this.complaintService.sendNotification(this.dataNotify).subscribe((resp)=>{
+      console.log(resp);
+    });
+  }
+
   public acceptComplaint(): void {
     const data = {
       status: 'In Progress',
@@ -1851,6 +2045,163 @@ export class ComplaintsListNewComponent implements OnInit {
       let  itm=this.allGRPS[0];
       this.form.controls['GRPS'].setValue(itm.id);
      console.log($event);
+  }
+
+  openModalNew(complaint : Complaint){
+    var navigation = document.getElementById('navigation');
+    var main = document.getElementById('main');
+    navigation!.className = 'navigation is-blurred';
+    main!.className = 'main is-blurred';
+    sessionStorage.setItem('complaint_unId', JSON.stringify(complaint.complaintUnId));
+    this.currentComplaint = complaint;
+    this.modalComplaint_complaintId = JSON.stringify(complaint.complaintUnId);
+    this.modalComplaint_AssignedGRP = complaint.assignedGRP;
+    this.modalComplaint_AssignedGRPs = complaint.assignedGRPs;
+    this.modalComplaint_TrainType = complaint.trainType;
+    if(complaint.trainType == 'Local'){
+      this.modalComplaint_stn_starting = complaint.stn_starting;
+      this.modalComplaint_stn_ending= complaint.stn_ending;
+    }else{
+      this.modalComplaint_TrainNo = complaint.mailTrainNo;
+      this.modalComplaint_CoachNo = complaint.stn_starting;
+      this.modalComplaint_SeatNo= complaint.stn_ending;
+    }
+    this.modalComplaint_complaintDesc = complaint.complaintBrief;
+    const data = {
+      isNewctrlrm : false,
+      timestampctrlrmview : firebase1.default.firestore.Timestamp.now().seconds
+    }
+    if (this.currentComplaint!.key && complaint.isNewctrlrm == true && this.currentUser === 'grphq.control.room@gmail.com') {
+      this.complaintService.update(this.currentComplaint!.key, data)
+        .then(() => this.message = 'The Complaint is not new!')
+        .catch(err => console.log(err));
+    }
+    const modelDiv = document.getElementById('myModal');
+    if(modelDiv != null){
+      modelDiv.style.display = 'block';
+    }
+  }
+
+  closeModalNew(){
+    const modelDiv = document.getElementById('myModal');
+    var navigation = document.getElementById('navigation');
+    var main = document.getElementById('main');
+    navigation!.className = 'navigation';
+    main!.className = 'main';
+    if(modelDiv != null){
+      modelDiv.style.display = 'none';
+    }
+  }
+
+  public exportToExcel(){
+    const workbook = new ExcelJS.Workbook();
+    const worksheet1 = workbook.addWorksheet('Complaints-Local');
+    const worksheet2 = workbook.addWorksheet('Complaints-Non-Local');
+
+    worksheet1.columns = [
+      { header: 'complaint Id', key: 'complaintUnId', width: 15},
+      { header: 'User Name', key: 'name', width: 32 },
+      { header: 'Phone No', key: 'phone', width: 15 },
+      { header: 'Complaint Type', key: 'complaint_type', width: 20 },
+      { header: 'Complaint Details', key: 'complaint_details', width: 32 },
+      { header: 'Train Type', key: 'train_type', width: 15 },
+      { header: 'Location', key: 'location', width: 15 },
+      { header: 'Starting Station', key: 'starting_stn', width: 15 },
+      { header: 'Ending Station', key: 'ending_stn', width: 15 },
+      { header: 'Timestamp', key: 'timestamp', width: 15 },
+      { header: 'Status', key: 'status', width: 15 },
+
+    ];
+
+    worksheet2.columns = [
+      { header: 'complaint Id', key: 'complaintUnId', width: 15},
+      { header: 'User Name', key: 'name', width: 32 },
+      { header: 'Phone No', key: 'phone', width: 15 },
+      { header: 'Complaint Type', key: 'complaint_type', width: 20 },
+      { header: 'Complaint Details', key: 'complaint_details', width: 32 },
+      { header: 'Train Type', key: 'train_type', width: 15 },
+      { header: 'Location', key: 'location', width: 15 },
+      { header: 'Train No', key: 'mailTrainNo', width: 15 },
+      { header: 'Coach No', key: 'starting_stn', width: 15 },
+      { header: 'Birth No', key: 'ending_stn', width: 15 },
+      { header: 'Timestamp', key: 'timestamp', width: 15 },
+      { header: 'Status', key: 'status', width: 15 },
+
+    ];
+
+    for (const complaint of this.selectedComplaintLocal!) {
+      worksheet1.addRow({
+        complaintUnId: complaint.complaintUnId ,
+        // date: purchase.item_purchase_date.toString().slice(0, 10).split('-').reverse().join('/'),
+        name: complaint.complaintByName,
+        phone: complaint.complaintByPhone,
+        complaint_type: complaint.complaintHead,
+        complaint_details: complaint.complaintBrief,
+        train_type: complaint.trainType,
+        location: complaint.stn_details_name,
+        starting_stn: complaint.stn_starting,
+        ending_stn: complaint.stn_ending,
+        timestamp: this.datePipe.transform(complaint.timestamp!*1000,'dd-MM-yyyy HH:mm:ss'),
+        status: complaint.status
+       })
+      .alignment = { horizontal: 'left' };
+    }
+
+    for (const complaint of this.selectedComplaintNonLocal!) {
+      worksheet2.addRow({
+        complaintUnId: complaint.complaintUnId ,
+        // date: purchase.item_purchase_date.toString().slice(0, 10).split('-').reverse().join('/'),
+        name: complaint.complaintByName,
+        phone: complaint.complaintByPhone,
+        complaint_type: complaint.complaintHead,
+        complaint_details: complaint.complaintBrief,
+        train_type: complaint.trainType,
+        location: complaint.stn_details_name,
+        mailTrainNo: complaint.mailTrainNo,
+        starting_stn: complaint.stn_starting,
+        ending_stn: complaint.stn_ending,
+        timestamp: this.datePipe.transform(complaint.timestamp!*1000,'dd-MM-yyyy HH:mm:ss'),
+        status: complaint.status
+       })
+      .alignment = { horizontal: 'left' };
+    }
+
+    worksheet1.getRow(1).font = { bold: true };
+
+    worksheet2.getRow(1).font = { bold: true };
+
+    // get help from here
+    // https://stackoverflow.com/questions/62149358/exceljs-iterate-each-cell-of-each-row-and-column/62149808#62149808
+    worksheet1.columns.forEach(column => {
+      // for each non empty cell
+      column.eachCell!((cell, rowNumber) => {
+        cell.border = {
+          top: { style: 'thick' },
+          left: { style: 'thick' },
+          bottom: { style: 'thick' },
+          right: { style: 'thick' }
+        };
+      });
+    });
+
+    worksheet2.columns.forEach(column => {
+      // for each non empty cell
+      column.eachCell!((cell, rowNumber) => {
+        cell.border = {
+          top: { style: 'thick' },
+          left: { style: 'thick' },
+          bottom: { style: 'thick' },
+          right: { style: 'thick' }
+        };
+      });
+    });
+
+    // save under export.xlsx, dont use writeFile see the above stackoverflow question
+    // await workbook.xlsx.writeFile('export.xlsx');
+    // await maybe optional here
+    workbook.xlsx.writeBuffer()
+      .then(buffer => FileSaver.saveAs(new Blob([buffer]), `Complaints.xlsx`))
+      .catch(err => console.log('Error writing excel export', err));
   }
 }
 

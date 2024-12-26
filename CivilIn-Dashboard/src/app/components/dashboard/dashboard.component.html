@@ -1,0 +1,13 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <!-- <a class="navbar-brand" routerLink="/dashboard">Phone Auth</a> -->
+      <ul class="navbar-nav ms-auto flex-nowrap">
+        <li class="nav-item">
+          <div style="cursor: pointer; color: black;" (click)="RaiseNewComplaint()" class="nav-link m-2 menu-item nav-active">Raise A New Complaint!</div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- <h2 class="mt-5">Welcome to the Dashboard user {{userData}} </h2> -->
+  <h2 class="mt-5">You have successfully raised the Complaint! Your New complint Id : {{ complaint_id }}.</h2>

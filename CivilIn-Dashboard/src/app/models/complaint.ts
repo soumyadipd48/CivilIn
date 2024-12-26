@@ -11,7 +11,7 @@ export class Complaint {
     lat? : number;
     lng? : number;
     status? : string;
-    stn_details? : number | null;
+    stn_details? : string;
     stn_details_name? : string;
     timestamp?: number;
     // trainPnr? : number;
@@ -26,7 +26,8 @@ export class Complaint {
     userPhone? : string;
     priority?: string;
     assignedGRP? : string;
-    assignedGRPS? : string;
+    assignedGRPs? : string;
     remarks? : string;
     modalComplaint_remarks? : string;
+    isNewctrlrm? : any;
 }

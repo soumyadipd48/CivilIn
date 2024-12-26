@@ -11,6 +11,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
 import { AuthGuard } from './shared/guard/auth.guard';
+import { AssistanceListNewComponent } from './components/assistance-list-new/assistance-list-new.component';
+import { GrpsListComponent } from './components/grps-list/grps-list.component';
+import { MorningReportComponent } from './components/morning-report/morning-report.component';
+import { ComplaintsWebComponent } from './components/complaints-web/complaints-web.component';
+import { CodeComponent } from './components/code/code.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MorningReportNewComponent } from './components/morning-report-new/morning-report-new.component';
+import { MorningReportNewAnalysisComponent } from './components/morning-report-new-analysis/morning-report-new-analysis.component';
+import { MorningReportViewOnlyComponent } from './components/morning-report-view-only/morning-report-view-only.component';
 
 const routes: Routes = [
   { path: 'policy', component: PrivacyPolicyComponent },
@@ -21,12 +30,21 @@ const routes: Routes = [
   { path: 'complaints', component: ComplaintsListComponent, canActivate: [AuthGuard]  },
   { path: 'complaintsNew', component: ComplaintsListNewComponent, canActivate: [AuthGuard]  },
   { path: 'assistance', component: AssistanceListComponent, canActivate: [AuthGuard]  },
+  { path: 'assistanceNew', component: AssistanceListNewComponent, canActivate: [AuthGuard]  },
+  { path: 'GRPS', component: GrpsListComponent, canActivate: [AuthGuard]  },
   { path: 'home', component: HomeComponent },
   { path: 'logout', component: LogoutComponent },
   //{ path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent},
   { path: 'privacy-policy', component: PrivacyPolicyComponent},
-  { path: '', redirectTo: '/home', pathMatch: 'full'}
+  { path: 'morning-report', component: MorningReportComponent},
+  { path: 'morning-report-new', component: MorningReportNewComponent},
+  { path: 'morning-report-view', component: MorningReportNewAnalysisComponent},
+  { path: 'morning-report-viewOnly', component: MorningReportViewOnlyComponent},
+  { path: 'complaints_web', component: ComplaintsWebComponent },
+  { path: 'code', component: CodeComponent },
+  { path: 'dash', component: DashboardComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full'}
 ];
 
 @NgModule({

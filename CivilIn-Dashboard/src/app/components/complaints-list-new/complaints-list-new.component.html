@@ -9,62 +9,130 @@
 </head>
 <body>
 
-    <!-- =============== Navigation ================ -->
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Complaint Id : {{ modalComplaint_complaintId }}</h4>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div>
+                    <Label style="font-weight: bold;">Assigned To GRP :</Label>
+                    <p>{{ modalComplaint_AssignedGRP }}</p>
+                </div>
+                <div>
+                    <Label>Assigned To GRPs :</Label>
+                    <p>{{ modalComplaint_AssignedGRPs }}</p>
+                </div>
+                <div>
+                    <Label>Complaint Brief :</Label>
+                    <p>{{ modalComplaint_complaintDesc }}</p>
+                </div>
+                <div>
+                    <Label>Train Type :</Label>
+                    <p>{{ modalComplaint_TrainType }}</p>
+                </div>
+                <div *ngIf="modalComplaint_TrainType != 'Local'">
+                    <Label>Train No :</Label>
+                    <p>{{ modalComplaint_TrainNo }}</p>
+                </div>
+                <div *ngIf="modalComplaint_TrainType != 'Local'">
+                    <Label>Coach No :</Label>
+                    <p>{{ modalComplaint_CoachNo }}</p>
+                </div>
+                <div *ngIf="modalComplaint_TrainType != 'Local'">
+                    <Label>Seat No :</Label>
+                    <p>{{ modalComplaint_SeatNo }}</p>
+                </div>
+                <div *ngIf="modalComplaint_TrainType == 'Local'">
+                    <Label>Starting Station :</Label>
+                    <p>{{ modalComplaint_stn_starting }}</p>
+                </div>
+                <div *ngIf="modalComplaint_TrainType == 'Local'">
+                    <Label>Ending Station :</Label>
+                    <p>{{ modalComplaint_stn_ending }}</p>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="#myModal" (click)="closeModalNew()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =============== Navigation ================ -->
  <div class="container">
-    <div [ngClass]="status ? 'active' : ''" class="navigation">
+    <div [ngClass]="status ? 'active' : ''" class="navigation" id="navigation">
         <ul>
             <li>
                 <a href="#">
                     <span class="icon">
-                      <i class="fa fa-apple"></i>
+                      <i><img src="../../../assets/civilin_logo.png" style="height: 30px; width: 30px; position: relative; top: -8px"></i>
                     </span>
                     <span class="title">CivilIn-Dashboard</span>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="#">
                     <span class="icon">
                       <i class="fa fa-home" aria-hidden="true"></i>
                     </span>
                     <span class="title">Dashboard</span>
                 </a>
-            </li>
+            </li> -->
             <li>
-                <a href="#">
+                <a href="complaintsNew">
                     <span class="icon">
-                      <i class="fa fa-users" aria-hidden="true"></i>
+                      <i><img src="..//..//../assets/complain.png" style="height: 35px; width: 35px; position: relative; left: 5px; bottom: 5px;"></i>
                     </span>
                     <span class="title">Complaints</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="assistanceNew">
                     <span class="icon">
-                      <i class="fa fa-users" aria-hidden="true"></i>
+                      <i><img src="..//..//../assets/call-center.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
                     </span>
                     <span class="title">Assistances</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="GRPS">
                     <span class="icon">
-                      <i class="fa fa-users" aria-hidden="true"></i>
+                        <i><img src="..//..//../assets/list.png" style="height: 35px; width: 30px; position: relative; bottom: 5px;"></i>
                     </span>
                     <span class="title">GRPS List</span>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="#">
                     <span class="icon">
                       <i class="fa fa-users" aria-hidden="true"></i>
                     </span>
                     <span class="title">All Users</span>
                 </a>
+            </li> -->
+            <li>
+                <a href="morning-report-new">
+                    <span class="icon">
+                      <i><img src="..//..//../assets/report.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                    </span>
+                    <span class="title">Morning Report</span>
+                </a>
             </li>
             <li>
-                <a href="#">
+                <a href="logout">
                     <span class="icon">
-                      <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        <i><img src="..//..//../assets/log-out.png" style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
                     </span>
                     <span class="title">Sign Out</span>
                 </a>
@@ -72,7 +140,7 @@
         </ul>
     </div>
     <!-- ========================= Main ==================== -->
-    <div [ngClass]="status ? 'active' : ''" class="main">
+    <div [ngClass]="status ? 'active' : ''" class="main" id="main">
         <div class="topbar">
             <div class="toggle" (click)="addToggle()">
               <i class="fa fa-bars" aria-hidden="true"></i>
@@ -90,57 +158,80 @@
         <!-- ======================= Cards ================== -->
         <div class="cardBox">
             <div class="card">
-                <div>
-                    <div class="numbers">1,504</div>
-                    <div class="cardName">Complaints</div>
+                <h4>Total Complaints</h4>
+                <div class="complaint_summary">
+                    <div>
+                        <div class="numbers">{{complaint_count_all}}</div>
+                        <div class="cardName">Complaints</div>
+                    </div>
+                    <div class="complaint_summary_counts">
+                        <p style="color: rgb(90, 90, 12);">
+                            <img src="../../../assets/In Progress.png" style="height: 20px; width: 20px;"> : {{complaint_count_progress}}
+                        </p>
+                        <p style="color: orange;">
+                            <img src="../../../assets/Pending.png" style="height: 20px; width: 20px;"> : {{complaint_count_pending}}
+                        </p>
+                        <p style="color: green;">
+                            <img src="../../../assets/Completed.png" style="height: 20px; width: 20px;"> : {{complaint_count_completed}}
+                        </p>
+                    </div>
                 </div>
-                <div class="iconBx">
-                  <i class="fa fa-eye" aria-hidden="true"></i>
+                <div class="complaint_summary_counts_by_percent">
+                    <p>{{ complaint_count_month_compare }}% {{ complaint_comparsion_msg }} than previous month.</p>
                 </div>
             </div>
+            <!-- <div class="card">
+                <h4>Daily Complaints</h4>
+                <div class="complaint_summary" style="height: 80px; top: -20px; position: relative;">
+                    <div>
+                        <div class="numbers">{{complaint_count_daily}}</div>
+                        <div class="cardName">Today Complaints received</div>
+                    </div>
+                </div>
+                <div class="complaint_summary_counts_by_percent" style="top: -25px; position: relative;">
+                    <p>{{ complaint_count_daily_compare }}% {{ complaint_comparison_msg_daily }} than previous day.</p>
+                </div>
+            </div> -->
             <div class="card">
-                <div>
-                    <div class="numbers">80</div>
-                    <div class="cardName">Assistance</div>
+                <h4>Daily Complaints</h4>
+                <div class="complaint_summary">
+                    <div>
+                        <div class="numbers">{{complaint_count_daily}}</div>
+                        <div class="cardName">Complaints</div>
+                    </div>
+                    <div class="complaint_summary_counts">
+                        <p style="color: rgb(90, 90, 12);">
+                            <img src="../../../assets/In Progress.png" style="height: 20px; width: 20px;"> : {{complaint_count_progress_daily}}
+                        </p>
+                        <p style="color: orange;">
+                            <img src="../../../assets/Pending.png" style="height: 20px; width: 20px;"> : {{complaint_count_pending_daily}}
+                        </p>
+                        <p style="color: green;">
+                            <img src="../../../assets/Completed.png" style="height: 20px; width: 20px;"> : {{complaint_count_completed_daily}}
+                        </p>
+                    </div>
                 </div>
-                <div class="iconBx">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <div class="complaint_summary_counts_by_percent">
+                    <p>{{ complaint_count_daily_compare }}% {{ complaint_comparison_msg_daily }} than previous day.</p>
                 </div>
             </div>
-            <!-- <div class="card">
-                <div>
-                    <div class="numbers">284</div>
-                    <div class="cardName">Comments</div>
-                </div>
-                <div class="iconBx">
-                  <i class="fa fa-comments-o" aria-hidden="true"></i>
-                </div>
-            </div> -->
-            <!-- <div class="card">
-                <div>
-                    <div class="numbers">$7,842</div>
-                    <div class="cardName">Earning</div>
-                </div>
-                <div class="iconBx">
-                  <i class="fa fa-money" aria-hidden="true"></i>
-                </div>
-            </div> -->
         </div>
         <div class="search_and_filter">
             <div class="search">
                 <label>
-                    <input type="text" placeholder="Search here">
+                    <input type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+                    placeholder="Start searching...">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </label>
             </div>
-            <div>
+            <!-- <div>
                 <select class="dropdown_order_by_select_com">
                     <option>Id</option>
                     <option>Timestamp</option>
                 </select>
-            </div>
+            </div> -->
             <div>
-                <select class="dropdown_select_com">
+                <select class="dropdown_select_com" [(ngModel)]="selectedcomplaintType" (change)="valueSelected()">
                     <option>All</option>
                     <option>Pending</option>
                     <option>Assigned</option>
@@ -152,75 +243,28 @@
         <!-- ================ Order Details List ================= -->
         <div class="details">
             <div class="recentOrders">
-                <div class="cardHeader">
-                    <h2>Complaints</h2>
-                    <a href="#" class="btn">Export to Excel</a>
+                <div class="cardHeader" [ngClass]="status ? 'active' : ''">
+                    <h2>COMPLAINTS</h2>
+                    <a href="#" class="btn" (click)="exportToExcel()">Export to Excel</a>
                 </div>
-                <table>
+                <!-- If user is HQ control room -->
+                <table *ngIf="currentUser==='grphq.control.room@gmail.com'">
                     <thead>
                         <tr>
-                            <td>Id</td>
-                            <td>User Details</td>
+                            <td style="width: 200px;">Complaint Id</td>
+                            <td style="text-align: center;">User Details</td>
                             <td>Complaint Type</td>
                             <td>Location</td>
                             <td>Timestamp</td>
                             <td>Status</td>
-                            <td>Action</td>
+                            <td style="text-align: center;">Action</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr>
-                            <td>Star Refrigerator</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span class="status delivered">Delivered</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dell Laptop</td>
-                            <td>$110</td>
-                            <td>Due</td>
-                            <td><span class="status pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>Apple Watch</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span class="status return">Return</span></td>
-                        </tr>
-                        <tr>
-                            <td>Addidas Shoes</td>
-                            <td>$620</td>
-                            <td>Due</td>
-                            <td><span class="status inProgress">In Progress</span></td>
-                        </tr>
-                        <tr>
-                            <td>Star Refrigerator</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span class="status delivered">Delivered</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dell Laptop</td>
-                            <td>$110</td>
-                            <td>Due</td>
-                            <td><span class="status pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>Apple Watch</td>
-                            <td>$1200</td>
-                            <td>Paid</td>
-                            <td><span class="status return">Return</span></td>
-                        </tr>
-                        <tr>
-                            <td>Addidas Shoes</td>
-                            <td>$620</td>
-                            <td>Due</td>
-                            <td><span class="status inProgress">In Progress</span></td>
-                        </tr> -->
-                        <tr *ngFor="let complaint of selectedGRPSComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
-                            <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
-                            <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
-                            <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}||{{ complaint.complaintByPhone }}</td>
+                        <tr *ngFor="let complaint of selectedComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <td *ngIf="complaint.complaintFor === 'Personal (for me)'" scope="row" style="text-align: center;"><span *ngIf="complaint.isNewctrlrm == true" class="badge bg-primary" style="padding: 5px; margin-right: 5px; top: -2px; position: relative;">New</span>{{ complaint.complaintUnId }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png"  (click)="openModalNew(complaint)"></td>
+                            <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" scope="row" style="text-align: center"><span *ngIf="complaint.isNewctrlrm == true" class="badge bg-primary" style="padding: 5px; margin-right: 5px; top: -2px; position: relative;">New</span>{{ complaint.complaintUnId }}_CO<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" (click)="openModalNew(complaint)"></td>
+                            <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}<br>{{ complaint.complaintByPhone }}</td>
                             <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
                             <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
                             <!-- <td style="text-align: center;">{{ complaint.complaintType }}</td>                                 -->
@@ -233,14 +277,51 @@
                             <!-- <td style="text-align: center;">{{ complaint.status }}</td> -->
                             <!-- <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="openModal(template_new, complaint)">Assign</button></td>
                             <td *ngIf="complaint.status !== 'Pending' && complaint.status != null" style="text-align: center"><button type="submit" (click)="openModal_progress(template_progress_new, complaint)" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td> -->
-                            <td *ngIf="complaint.status === 'Assigned'" style="text-align: center;">Pending</td>
+                            <td *ngIf="complaint.status === 'Pending'" style="text-align: center;">Pending from GRPs</td>
                             <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
-                            <td *ngIf="complaint.status === 'Assigned' || complaint.status == null" style="text-align: center"><button type="submit">Accept</button></td>
+                            <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit" (click)="notifyComplaint(complaint)">Notify</button></td>
+                            <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                            <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- If user is other than HQ control room -->
+                <table *ngIf="currentUser!=='grphq.control.room@gmail.com'">
+                    <thead>
+                        <tr>
+                            <td style="width: 200px;">Assistance Id</td>
+                            <td style="text-align: center;">User Details</td>
+                            <td>Assistance Type</td>
+                            <td>Station</td>
+                            <td>Timestamp</td>
+                            <td>Status</td>
+                            <td style="text-align: center;">Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let complaint of selectedGRPSComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <td *ngIf="complaint.complaintFor === 'Personal (for me)'" scope="row" style="text-align: center;" (click)="openModalNew(complaint)">{{ complaint.complaintUnId }}</td>
+                            <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" scope="row" style="text-align: center;" (click)="openModalNew(complaint)">{{ complaint.complaintUnId }}_CO</td>
+                            <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}<br>{{ complaint.complaintByPhone }}</td>
+                            <td *ngIf="complaint.complaintHead === 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">Unauthorized Person in Compartment</td>
+                            <td *ngIf="complaint.complaintHead !== 'Unauthorized Person in Ladies or Disabled or Reserved Coach'" style="text-align: center;">{{ complaint.complaintHead }}</td>
+                            <td *ngIf="complaint.trainType === 'Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                            <td *ngIf="complaint.trainType === 'Non-Local'" style="text-align: center;"><a style="text-decoration: none;" href="{{ 'https://www.google.com/maps/place/' + complaint.lat }},{{ complaint.lng }}" target="_blank" rel="noreferrer noopener">{{ complaint.stn_details_name }}</a></td>
+                            <td style="text-align: center;">{{ complaint.timestamp*1000 | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+                            <td *ngIf="complaint.status === 'Pending'" style="text-align: center;">Pending</td>
+                            <td *ngIf="complaint.status === 'In Progress' || complaint.status === 'Completed'" style="text-align: center;">{{ complaint.status }}</td>
+                            <td *ngIf="complaint.status === 'Pending' || complaint.status == null" style="text-align: center"><button type="submit">Accept</button></td>
                             <td *ngIf="complaint.status === 'In Progress'" style="text-align: center;"><button type="submit" style="background-color: rgb(231, 231, 17);" class="button_view">Complete</button></td>
                             <td *ngIf="complaint.status === 'Completed' && complaint.status != null" style="text-align: center"><button type="submit" style="background-color: rgb(231, 231, 17);" class="button_view">View</button></td>
                         </tr>
                     </tbody>
                 </table>
+
+                <!--Including the pagination control.-->
+                <div class="text-right" style="margin-top: 50px;">
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </div>
+
             </div>
             <!-- ================= New Customers ================ -->
             <!-- <div class="recentCustomers">

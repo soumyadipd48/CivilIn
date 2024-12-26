@@ -268,7 +268,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedGRPSAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedGRPSAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
@@ -315,7 +315,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
@@ -358,7 +358,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedHWHAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedHWHAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
@@ -404,7 +404,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedKGPAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedKGPAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
@@ -450,7 +450,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedSGUJAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedSGUJAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>
@@ -497,7 +497,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let assistance of selectedSDAHAssistance | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                                *ngFor="let assistance of selectedSDAHAssistance | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td class="col-id-no" scope="row" style="text-align: center;">{{ assistance.assUnId }}</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ assistance.assName }}</td>
                                 <td style="text-align: center;">{{ assistance.assHead }}</td>

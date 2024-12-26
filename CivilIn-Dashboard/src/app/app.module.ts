@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,13 +30,47 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AuthService } from './services/auth.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { BaseComponent } from './components/base/base.component';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { Ng2OrderModule} from 'ng2-order-pipe';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { ModalModule} from 'ngx-bootstrap/modal'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpClientModule} from '@angular/common/http';
-import { ComplaintsListNewComponent } from './components/complaints-list-new/complaints-list-new.component'
+import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { ComplaintsListNewComponent } from './components/complaints-list-new/complaints-list-new.component';
+import { AssistanceListNewComponent } from './components/assistance-list-new/assistance-list-new.component'
+import { DatePipe } from '@angular/common';
+import { UsersListComponent } from './components/users-list/users-list.component';
+import { GrpsListComponent } from './components/grps-list/grps-list.component';
+import { MorningReportComponent } from './components/morning-report/morning-report.component';
+import { ComplaintsWebComponent } from './components/complaints-web/complaints-web.component';
+import { WindowService } from './services/window.service';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { CodeComponent } from './components/code/code.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NgOtpInputModule } from 'ng-otp-input';
+import { NgxPrintModule } from 'ngx-print';
+import { NgxSearchPipeModule } from 'ngx-search-pipe';
+import { OrderModule } from 'ngx-order-pipe';
+import { MorningReportNewComponent } from './components/morning-report-new/morning-report-new.component';
+import { MorningReportNewAnalysisComponent } from './components/morning-report-new-analysis/morning-report-new-analysis.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { MorningReportViewOnlyComponent } from './components/morning-report-view-only/morning-report-view-only.component';
+
+export function loadCrucialData() {
+  return function() {
+    // or use UserService
+    return delay(1000);
+  }
+}
+
+export function delay(delay: number) {
+  return function() {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, delay);
+    });
+  }
+}
 
 @NgModule({
   declarations: [
@@ -50,10 +84,21 @@ import { ComplaintsListNewComponent } from './components/complaints-list-new/com
     VerifyEmailComponent,
     NavbarComponent,
     BaseComponent,
-    ComplaintsListNewComponent
+    ComplaintsListNewComponent,
+    AssistanceListNewComponent,
+    UsersListComponent,
+    GrpsListComponent,
+    MorningReportComponent,
+    ComplaintsWebComponent,
+    CodeComponent,
+    DashboardComponent,
+    MorningReportNewComponent,
+    MorningReportNewAnalysisComponent,
+    MorningReportViewOnlyComponent
   ],
   imports: [
     BrowserModule,
+    OrderModule,
     ReactiveFormsModule,
     AppRoutingModule,
     FormsModule,
@@ -73,14 +118,34 @@ import { ComplaintsListNewComponent } from './components/complaints-list-new/com
     AngularFireStorageModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    Ng2SearchPipeModule,
-    Ng2OrderModule,
+    NgxSearchPipeModule, 
     NgxPaginationModule,
     FontAwesomeModule,
-    HttpClientModule
+    HttpClientModule,
+    AutocompleteLibModule,
+    NgOtpInputModule,
+    NgxPrintModule,
+    BrowserAnimationsModule, // required animations module
+    NgxSpinnerModule,
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: false,
+    }), // ToastrModule added
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    ScreenTrackingService,UserTrackingService,AuthService
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: loadCrucialData()
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
+    },
+    ScreenTrackingService,UserTrackingService,AuthService,DatePipe,WindowService
   ],
   bootstrap: [AppComponent]
 })

@@ -22,6 +22,13 @@ export class ComplaintService {
     return this.complaintsRef;
   }
 
+  insert(complaint : Complaint) : any {
+    // return this.complaintsRef.push(complaint);
+    const id = this.complaintsRef.push(complaint);
+    const postId = id.key;
+    return postId;
+  }
+
   update(key: string, value: any): Promise<void> {
     return this.complaintsRef.update(key, value);
   }

@@ -1426,7 +1426,7 @@ export class ComplaintsListComponent implements OnInit {
 
       this.Complaints.forEach( (element) => {
         // console.log("stn_details " + element.stn_details);
-        const n = element.stn_details;
+        const n : any = element.stn_details;
         // console.log("stn_details--->n " + n);
         
         element.stn_details_name = this.stn[n!];
@@ -1461,7 +1461,7 @@ export class ComplaintsListComponent implements OnInit {
         })
 
         this.selectedGRPSComplaint = this.Complaints?.filter(
-          item => item.assignedGRPS === newGRPSNo
+          item => item.assignedGRPs === newGRPSNo
         )
 
         this.selectedHWHComplaint = this.Complaints?.filter(

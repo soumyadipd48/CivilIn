@@ -262,7 +262,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedGRPSComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedGRPSComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
@@ -314,7 +314,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
@@ -362,7 +362,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedHWHComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedHWHComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
@@ -413,7 +413,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedKGPComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedKGPComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
@@ -464,7 +464,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedSGUJComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedSGUJComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>
@@ -515,7 +515,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let complaint of selectedSDAHComplaint | filter:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
+                            <tr *ngFor="let complaint of selectedSDAHComplaint | ngxSearchPipe:searchText | orderBy: key: reverse | paginate : {itemsPerPage:15,currentPage:p};">
                                 <td *ngIf="complaint.complaintFor === 'Personal (for me)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}</td>
                                 <td *ngIf="complaint.complaintFor === 'Co-Passenger (for someone else)'" class="col-id-no" scope="row" style="text-align: center;">{{ complaint.complaintUnId }}_CO</td>
                                 <td class="col-first-name" scope="row" style="text-align: center;">{{ complaint.complaintByName }}</td>

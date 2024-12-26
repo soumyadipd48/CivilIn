@@ -32,7 +32,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "src/styles.css",
-              "node_modules/ionicons/dist/scss/ionicons.scss"
+              "node_modules/ionicons/dist/scss/ionicons.scss",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/ngx-spinner/animations/ball-scale-ripple.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -108,7 +110,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "src/styles.css",
-              "node_modules/ionicons/dist/scss/ionicons.scss"
+              "node_modules/ionicons/dist/scss/ionicons.scss",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/ngx-spinner/animations/ball-scale-ripple.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

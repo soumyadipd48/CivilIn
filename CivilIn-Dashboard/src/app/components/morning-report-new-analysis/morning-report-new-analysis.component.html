@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Report with Analysis</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<!-- The Modal - Preventive Arrest Howrah -->
+<div class="modal" id="myModalPrevArrest">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Preventive Arrest Howrah</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">GRP Dist.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">U/S 151 Cr. PC</th>
+                  <th scope="col">107/116C Cr. PC</th>
+                  <th scope="col">U/S 41/109 Cr. PC</th>
+                  <th scope="col">U/S  42/109 Cr. P.C.</th>
+                  <th scope="col">34 Police. Act.</th>
+                  <th scope="col">42 Cr. PC/290 IPC</th>
+                  <th scope="col">BCLA Act.</th>
+                  <th scope="col">IR Act.</th>
+                  <th scope="col">Other</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">HWH</td>
+                  <td>{{ PreventiveArrestObjectMain.dateofIncident }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act1 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act2 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act3 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act4 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.policeAct }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act4 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.bclaact }}</td>
+                  <td>{{ PreventiveArrestObjectMain.iract }}</td>
+                  <td>{{ PreventiveArrestObjectMain.other }}</td>
+                  <td>{{ PreventiveArrestObjectMain.total }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closeModalPrevArrest()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - Preventive Arrest Sealdah -->
+<div class="modal" id="myModalPrevArrestSealdah">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Preventive Arrest Sealdah</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">GRP Dist.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">151 Cr. PC</th>
+                  <th scope="col">109 Cr. PC</th>
+                  <th scope="col">110 Cr. PC</th>
+                  <th scope="col">34 Police. Act.</th>
+                  <th scope="col">290 IPC</th>
+                  <th scope="col">BCLA Act.</th>
+                  <th scope="col">IR Act.</th>
+                  <th scope="col">Other</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">SLD</td>
+                  <td>{{ PreventiveArrestObjectMain.dateofIncident }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act1 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act2 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act3 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.policeAct }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act5 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.bclaact }}</td>
+                  <td>{{ PreventiveArrestObjectMain.iract }}</td>
+                  <td>{{ PreventiveArrestObjectMain.other }}</td>
+                  <td>{{ PreventiveArrestObjectMain.total }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closeModalPrevArrest()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - Preventive Arrest Siliguri -->
+<div class="modal" id="myModalPrevArrestSiliguri">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Preventive Arrest Siliguri</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">GRP Dist.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">107/151 Cr. PC</th>
+                  <th scope="col">109 Cr. PC</th>
+                  <th scope="col">110 Cr. PC</th>
+                  <th scope="col">34 Police. Act.</th>
+                  <th scope="col">42 Cr. PC/290 IPC</th>
+                  <th scope="col">BCLA Act.</th>
+                  <th scope="col">IR Act.</th>
+                  <th scope="col">Other</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">SLG</td>
+                  <td>{{ PreventiveArrestObjectMain.dateofIncident }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act1 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act2 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act3 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.policeAct }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act5 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.bclaact }}</td>
+                  <td>{{ PreventiveArrestObjectMain.iract }}</td>
+                  <td>{{ PreventiveArrestObjectMain.other }}</td>
+                  <td>{{ PreventiveArrestObjectMain.total }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closeModalPrevArrest()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - Preventive Arrest Kharagpur -->
+<div class="modal" id="myModalPrevArrestKharagpur">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Preventive Arrest Kharagpur</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">GRP Dist.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">151 Cr. PC</th>
+                  <th scope="col">109 Cr. PC</th>
+                  <th scope="col">110 Cr. PC</th>
+                  <th scope="col">34 Police. Act.</th>
+                  <th scope="col">290 IPC</th>
+                  <th scope="col">BCLA Act.</th>
+                  <th scope="col">IR Act.</th>
+                  <th scope="col">Other</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">KGP</td>
+                  <td>{{ PreventiveArrestObjectMain.dateofIncident }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act1 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act2 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act3 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.policeAct }}</td>
+                  <td>{{ PreventiveArrestObjectMain.act5 }}</td>
+                  <td>{{ PreventiveArrestObjectMain.bclaact }}</td>
+                  <td>{{ PreventiveArrestObjectMain.iract }}</td>
+                  <td>{{ PreventiveArrestObjectMain.other }}</td>
+                  <td>{{ PreventiveArrestObjectMain.total }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closeModalPrevArrest()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - FIR Cases Howrah-->
+<div class="modal" id="myModalFIR">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">FIR Cases Howrah</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body" *ngFor="let firCase of FIRCaseObjectMain">
+          <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;">{{ firCase.detailsHead }}</p>
+          <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ firCase.details }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="closePreviewModalFIRCasesAnaDetails()" style="padding: 5px;">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- The Modal - FIR Cases Sealdah-->
+<div class="modal" id="myModalFIRSealdah">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">FIR Cases Sealdah</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let firCase of FIRCaseObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;">{{ firCase.detailsHead }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ firCase.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalFIRCasesAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - FIR Cases Sealdah-->
+<div class="modal" id="myModalFIRSealdah">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">FIR Cases Sealdah</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let firCase of FIRCaseObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;">{{ firCase.detailsHead }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ firCase.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalFIRCasesAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- The Modal - FIR Cases Siliguri-->
+<div class="modal" id="myModalFIRSiliguri">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">FIR Cases Siliguri</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let firCase of FIRCaseObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;">{{ firCase.detailsHead }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ firCase.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalFIRCasesAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - FIR Cases Kharagpur-->
+<div class="modal" id="myModalFIRKharagpur">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">FIR Cases Kharagpur</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let firCase of FIRCaseObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;">{{ firCase.detailsHead }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ firCase.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalFIRCasesAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - Seizure -->
+<div class="modal" id="myModalSeizure">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seizure Howrah</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let seizure of SeizureObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;"> Seizure - {{ seizure.typeofSeizure }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ seizure.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalSeizureAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - Seizure Sealdah -->
+<div class="modal" id="myModalSeizureSealdah">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seizure Sealdah</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let seizure of SeizureObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;"> Seizure - {{ seizure.typeofSeizure }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ seizure.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalSeizureAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - Seizure Siliguri -->
+<div class="modal" id="myModalSeizureSiliguri">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seizure Siliguri</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let seizure of SeizureObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;"> Seizure - {{ seizure.typeofSeizure }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ seizure.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalSeizureAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - Seizure Kharagpur -->
+<div class="modal" id="myModalSeizureKharagpur">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Seizure Kharagpur</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" *ngFor="let seizure of SeizureObjectMain">
+        <p style="font-weight: bold; font-size: medium; margin-bottom: 5px;"> Seizure - {{ seizure.typeofSeizure }}</p>
+        <p style="border: 1px solid rgb(218, 219, 244); padding: 5px; border-radius: 5px;">{{ seizure.details }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closePreviewModalSeizureAnaDetails()" style="padding: 5px;">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal - UD Howrah -->
+<div class="modal" id="myModalUDHowrah">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Unidentified Deaths Howrah</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Name of GRPS</th>
+                  <th scope="col">UD Case No.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">PO</th>
+                  <th scope="col">Name of the Deceased</th>
+                  <th scope="col">Sex</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Gist of the Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let udCase of UDCaseObjectMain">
+                  <td>{{ udCase.grpsname }}</td>
+                  <td>{{ udCase.udcaseNo }}</td>
+                  <td>{{ udCase.dateofIncident }}</td>
+                  <td>{{ udCase.po }}</td>
+                  <td>{{ udCase.nameOfDeceased }}</td>
+                  <td>{{ udCase.sex }}</td>
+                  <td>{{ udCase.age }}</td>
+                  <td>{{ udCase.gistOfTheCase }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closePreviewModalUDAnaDetailsHowrah()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - UD Sealdah -->
+<div class="modal" id="myModalUDSealdah">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Unidentified Deaths Sealdah</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Name of GRPS</th>
+                  <th scope="col">UD Case No.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">PO</th>
+                  <th scope="col">Name of the Deceased</th>
+                  <th scope="col">Sex</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Gist of the Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let udCase of UDCaseObjectMain">
+                  <td>{{ udCase.grpsname }}</td>
+                  <td>{{ udCase.udcaseNo }}</td>
+                  <td>{{ udCase.dateofIncident }}</td>
+                  <td>{{ udCase.po }}</td>
+                  <td>{{ udCase.nameOfDeceased }}</td>
+                  <td>{{ udCase.sex }}</td>
+                  <td>{{ udCase.age }}</td>
+                  <td>{{ udCase.gistOfTheCase }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closePreviewModalUDAnaDetailsHowrah()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - UD Siliguri -->
+<div class="modal" id="myModalUDSiliguri">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Unidentified Deaths Siliguri</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Name of GRPS</th>
+                  <th scope="col">UD Case No.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">PO</th>
+                  <th scope="col">Name of the Deceased</th>
+                  <th scope="col">Sex</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Gist of the Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let udCase of UDCaseObjectMain">
+                  <td>{{ udCase.grpsname }}</td>
+                  <td>{{ udCase.udcaseNo }}</td>
+                  <td>{{ udCase.dateofIncident }}</td>
+                  <td>{{ udCase.po }}</td>
+                  <td>{{ udCase.nameOfDeceased }}</td>
+                  <td>{{ udCase.sex }}</td>
+                  <td>{{ udCase.age }}</td>
+                  <td>{{ udCase.gistOfTheCase }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closePreviewModalUDAnaDetailsHowrah()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- The Modal - UD Kharagpur -->
+<div class="modal" id="myModalUDKharagpur">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Unidentified Deaths Kharagpur</h4>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModalNew()"></button> -->
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Name of GRPS</th>
+                  <th scope="col">UD Case No.</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">PO</th>
+                  <th scope="col">Name of the Deceased</th>
+                  <th scope="col">Sex</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Gist of the Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let udCase of UDCaseObjectMain">
+                  <td>{{ udCase.grpsname }}</td>
+                  <td>{{ udCase.udcaseNo }}</td>
+                  <td>{{ udCase.dateofIncident }}</td>
+                  <td>{{ udCase.po }}</td>
+                  <td>{{ udCase.nameOfDeceased }}</td>
+                  <td>{{ udCase.sex }}</td>
+                  <td>{{ udCase.age }}</td>
+                  <td>{{ udCase.gistOfTheCase }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="#myModalPrevArrest" (click)="closePreviewModalUDAnaDetailsHowrah()">Close</button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+    <!-- =============== Navigation ================ -->
+    <div class="container">
+        <div [ngClass]="status ? 'active' : ''" class="navigation" id="navigation">
+          <ul>
+            <li>
+              <a href="#">
+                <span class="icon">
+                  <i><img src="../../../assets/civilin_logo.png"
+                      style="height: 30px; width: 30px; position: relative; top: -8px"></i>
+                </span>
+                <span class="title">CivilIn-Dashboard</span>
+              </a>
+            </li>
+            <!-- <li>
+                  <a href="#">
+                      <span class="icon">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                      </span>
+                      <span class="title">Dashboard</span>
+                  </a>
+              </li> -->
+            <li>
+              <a href="complaintsNew">
+                <span class="icon">
+                  <i><img src="..//..//../assets/complain.png"
+                      style="height: 35px; width: 35px; position: relative; left: 5px; bottom: 5px;"></i>
+                </span>
+                <span class="title">Complaints</span>
+              </a>
+            </li>
+            <li>
+              <a href="assistanceNew">
+                <span class="icon">
+                  <i><img src="..//..//../assets/call-center.png"
+                      style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                </span>
+                <span class="title">Assistances</span>
+              </a>
+            </li>
+            <li>
+              <a href="GRPS">
+                <span class="icon">
+                  <i><img src="..//..//../assets/list.png"
+                      style="height: 35px; width: 30px; position: relative; bottom: 5px;"></i>
+                </span>
+                <span class="title">GRPS List</span>
+              </a>
+            </li>
+            <!-- <li>
+                  <a href="#">
+                      <span class="icon">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                      </span>
+                      <span class="title">All Users</span>
+                  </a>
+              </li> -->
+            <li>
+              <a href="morning-report-new">
+                <span class="icon">
+                  <i><img src="..//..//../assets/report.png"
+                      style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                </span>
+                <span class="title">Morning Report</span>
+              </a>
+            </li>
+            <li>
+              <a href="logout">
+                <span class="icon">
+                  <i><img src="..//..//../assets/log-out.png"
+                      style="height: 35px; width: 35px; position: relative; bottom: 5px;"></i>
+                </span>
+                <span class="title">Sign Out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- ========================= Main ==================== -->
+    <div [ngClass]="status ? 'active' : ''" class="main" id="main">
+        <div class="topbar">
+          <div class="toggle" (click)="addToggle()">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+          </div>
+          <!-- <div class="search">
+              <label>
+                  <input type="text" placeholder="Search here">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+              </label>
+          </div> -->
+          <!-- <div style="display: flex;">
+            <h5 style="position: relative; font-weight: bold; margin: 20px 0; font-size: 30px; width: 100%;
+             text-align: center; font-family: system-ui, -apple-system, BlinkMacSystemFont,
+              'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+              {{selectedGRPS}} Strength
+            </h5>
+          </div> -->
+          <h5 style="position: relative; font-weight: bold; margin: 20px 0; font-size: 32px; width: 100%;
+             left: 40%; font-family: Roboto;" *ngIf="selectedGRPS !== 'Select'">
+              {{selectedGRPS}}
+          </h5>
+          <div>
+            <select class="dropdown_select_grps" [(ngModel)]="selectedGRPS" (change)="valueSelected()">
+                <option style="display: none;">Select</option>
+                <option>Howrah</option>
+                <option>Sealdah</option>
+                <option>Siliguri</option>
+                <option>Kharagpur</option>
+            </select>
+          </div>
+          <div class="user">
+            <img src="assets/user.png" alt="">
+          </div>
+        </div>
+
+
+        <div style="display: flex;">
+          <!-- <h5 style="position: relative; font-weight: bold; margin: 20px 0; font-size: 30px;
+           width: 100%; text-align: center; font-family: system-ui, -apple-system,
+            BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+             'Helvetica Neue', sans-serif;">{{selectedGRPS}} Strength
+          </h5> -->
+
+            <!-- <div>
+                <select class="dropdown_select_grps" [(ngModel)]="selectedGRPS" (change)="valueSelected()">
+                    <option style="display: none;">Select</option>
+                    <option>Howrah</option>
+                    <option>Sealdah</option>
+                    <option>Siliguri</option>
+                    <option>Kharagpur</option>
+                </select>
+            </div> -->
+            
+        </div>
+
+        <div class="table_content">
+            <!-- <h1>Common Sitrep</h1>  -->
+            <h5 style="text-align: center; font-weight: bold; margin: 20px 0; margin-top: 0;">Morning Report of Officers & Force</h5>
+            <table class="table table-bordered" id="tableStrength">
+                <thead>
+                  <tr>
+                    <th scope="col" style="border-top-left-radius: 10px; border: solid 1px #fff;"></th>
+                    <th scope="col">Inspr</th>
+                    <th scope="col">SI/LSI</th>
+                    <th scope="col">ASI/LASI</th>
+                    <th scope="col">Const.</th>
+                    <th scope="col">L/C</th>
+                    <th scope="col">NVF</th>
+                    <th scope="col">HG</th>
+                    <th scope="col" style="border-top-right-radius: 10px; border: solid 1px #fff;">Civic</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Sanction Strength</th>
+                    <td>{{ sanctionStrengthCommon.inspr }}</td>
+                    <td>{{ sanctionStrengthCommon.silsi }}</td>
+                    <td>{{ sanctionStrengthCommon.asilasi }}</td>
+                    <td>{{ sanctionStrengthCommon.const }}</td>
+                    <td>{{ sanctionStrengthCommon.lc }}</td>
+                    <td>{{ sanctionStrengthCommon.nvf }}</td>
+                    <td>{{ sanctionStrengthCommon.hg }}</td>
+                    <td>{{ sanctionStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Actual Strength</th>
+                    <td>{{ actualStrengthCommon.inspr }}</td>
+                    <td>{{ actualStrengthCommon.silsi }}</td>
+                    <td>{{ actualStrengthCommon.asilasi }}</td>
+                    <td>{{ actualStrengthCommon.const }}</td>
+                    <td>{{ actualStrengthCommon.lc }}</td>
+                    <td>{{ actualStrengthCommon.nvf }}</td>
+                    <td>{{ actualStrengthCommon.hg }}</td>
+                    <td>{{ actualStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Vacancy</th>
+                    <td>{{ vacancyStrengthCommon.inspr }}</td>
+                    <td>{{ vacancyStrengthCommon.silsi }}</td>
+                    <td>{{ vacancyStrengthCommon.asilasi }}</td>
+                    <td>{{ vacancyStrengthCommon.const }}</td>
+                    <td>{{ vacancyStrengthCommon.lc }}</td>
+                    <td>{{ vacancyStrengthCommon.nvf }}</td>
+                    <td>{{ vacancyStrengthCommon.hg }}</td>
+                    <td>{{ vacancyStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Deputation to other Unit</th>
+                    <td>{{ deputationtootherunitStrengthCommon.inspr }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.silsi }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.asilasi }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.const }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.lc }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.nvf }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.hg }}</td>
+                    <td>{{ deputationtootherunitStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Deputation from other Unit</th>
+                    <td>{{ deputationfromotherunitStrengthCommon.inspr }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.silsi }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.asilasi }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.const }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.lc }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.nvf }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.hg }}</td>
+                    <td>{{ deputationfromotherunitStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Available Strength</th>
+                    <td>{{ availableStrengthCommon.inspr }}</td>
+                    <td>{{ availableStrengthCommon.silsi }}</td>
+                    <td>{{ availableStrengthCommon.asilasi }}</td>
+                    <td>{{ availableStrengthCommon.const }}</td>
+                    <td>{{ availableStrengthCommon.lc }}</td>
+                    <td>{{ availableStrengthCommon.nvf }}</td>
+                    <td>{{ availableStrengthCommon.hg }}</td>
+                    <td>{{ availableStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Total</th>
+                    <td>{{ actualStrengthCommon.inspr }}</td>
+                    <td>{{ actualStrengthCommon.silsi }}</td>
+                    <td>{{ actualStrengthCommon.asilasi }}</td>
+                    <td>{{ actualStrengthCommon.const }}</td>
+                    <td>{{ actualStrengthCommon.lc }}</td>
+                    <td>{{ actualStrengthCommon.nvf }}</td>
+                    <td>{{ actualStrengthCommon.hg }}</td>
+                    <td>{{ actualStrengthCommon.civic }}</td>
+                  </tr>
+                </tbody>
+                </table>
+                <h5 style="text-align: center; font-weight: bold; margin: 20px 0;">Detailment of Officers & Force (at a glance)</h5>
+                <table class="table table-bordered" id="tableStrength">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="border-top-left-radius: 10px; border: solid 1px #fff;"></th>
+                      <th scope="col">Inspr</th>
+                      <th scope="col">SI/LSI</th>
+                      <th scope="col">ASI/LASI</th>
+                      <th scope="col">Const.</th>
+                      <th scope="col">L/C</th>
+                      <th scope="col">NVF</th>
+                      <th scope="col">HG</th>
+                      <th scope="col" style="border-top-right-radius: 10px; border: solid 1px #fff;">Civic</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <th scope="row">Leave</th>
+                    <td>{{ leaveStrengthCommon.inspr }}</td>
+                    <td>{{ leaveStrengthCommon.silsi }}</td>
+                    <td>{{ leaveStrengthCommon.asilasi }}</td>
+                    <td>{{ leaveStrengthCommon.const }}</td>
+                    <td>{{ leaveStrengthCommon.lc }}</td>
+                    <td>{{ leaveStrengthCommon.nvf }}</td>
+                    <td>{{ leaveStrengthCommon.hg }}</td>
+                    <td>{{ leaveStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Static Guard</th>
+                    <td>{{ staticguardStrengthCommon.inspr }}</td>
+                    <td>{{ staticguardStrengthCommon.silsi }}</td>
+                    <td>{{ staticguardStrengthCommon.asilasi }}</td>
+                    <td>{{ staticguardStrengthCommon.const }}</td>
+                    <td>{{ staticguardStrengthCommon.lc }}</td>
+                    <td>{{ staticguardStrengthCommon.nvf }}</td>
+                    <td>{{ staticguardStrengthCommon.hg }}</td>
+                    <td>{{ staticguardStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Misc.Duty</th>
+                    <td>{{ miscdutyStrengthCommon.inspr }}</td>
+                    <td>{{ miscdutyStrengthCommon.silsi }}</td>
+                    <td>{{ miscdutyStrengthCommon.asilasi }}</td>
+                    <td>{{ miscdutyStrengthCommon.const }}</td>
+                    <td>{{ miscdutyStrengthCommon.lc }}</td>
+                    <td>{{ miscdutyStrengthCommon.nvf }}</td>
+                    <td>{{ miscdutyStrengthCommon.hg }}</td>
+                    <td>{{ miscdutyStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Training</th>
+                    <td>{{ trainingStrengthCommon.inspr }}</td>
+                    <td>{{ trainingStrengthCommon.silsi }}</td>
+                    <td>{{ trainingStrengthCommon.asilasi }}</td>
+                    <td>{{ trainingStrengthCommon.const }}</td>
+                    <td>{{ trainingStrengthCommon.lc }}</td>
+                    <td>{{ trainingStrengthCommon.nvf }}</td>
+                    <td>{{ trainingStrengthCommon.hg }}</td>
+                    <td>{{ trainingStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Security Guard</th>
+                    <td>{{ securityguardStrengthCommon.inspr }}</td>
+                    <td>{{ securityguardStrengthCommon.silsi }}</td>
+                    <td>{{ securityguardStrengthCommon.asilasi }}</td>
+                    <td>{{ securityguardStrengthCommon.const }}</td>
+                    <td>{{ securityguardStrengthCommon.lc }}</td>
+                    <td>{{ securityguardStrengthCommon.nvf }}</td>
+                    <td>{{ securityguardStrengthCommon.hg }}</td>
+                    <td>{{ securityguardStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Camp</th>
+                    <td>{{ campStrengthCommon.inspr }}</td>
+                    <td>{{ campStrengthCommon.silsi }}</td>
+                    <td>{{ campStrengthCommon.asilasi }}</td>
+                    <td>{{ campStrengthCommon.const }}</td>
+                    <td>{{ campStrengthCommon.lc }}</td>
+                    <td>{{ campStrengthCommon.nvf }}</td>
+                    <td>{{ campStrengthCommon.hg }}</td>
+                    <td>{{ campStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Train Guard</th>
+                    <td>{{ trainguardStrengthCommon.inspr }}</td>
+                    <td>{{ trainguardStrengthCommon.silsi }}</td>
+                    <td>{{ trainguardStrengthCommon.asilasi }}</td>
+                    <td>{{ trainguardStrengthCommon.const }}</td>
+                    <td>{{ trainguardStrengthCommon.lc }}</td>
+                    <td>{{ trainguardStrengthCommon.nvf }}</td>
+                    <td>{{ trainguardStrengthCommon.hg }}</td>
+                    <td>{{ trainguardStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Mise. Duty at Hqr. Duty</th>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.inspr }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.silsi }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.asilasi }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.const }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.lc }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.nvf }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.hg }}</td>
+                    <td>{{ miscdutyathqrdutyStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Misc.Duty at GRPS/GRPP</th>
+                    <td>{{ miscdutyatgrpsStrengthCommon.inspr }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.silsi }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.asilasi }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.const }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.lc }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.nvf }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.hg }}</td>
+                    <td>{{ miscdutyatgrpsStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Suspension</th>
+                    <td>{{ suspensionStrengthCommon.inspr }}</td>
+                    <td>{{ suspensionStrengthCommon.silsi }}</td>
+                    <td>{{ suspensionStrengthCommon.asilasi }}</td>
+                    <td>{{ suspensionStrengthCommon.const }}</td>
+                    <td>{{ suspensionStrengthCommon.lc }}</td>
+                    <td>{{ suspensionStrengthCommon.nvf }}</td>
+                    <td>{{ suspensionStrengthCommon.hg }}</td>
+                    <td>{{ suspensionStrengthCommon.civic }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" style="border-bottom-left-radius: 10px;">Other duty</th>
+                    <td>{{ otherdutyStrengthCommon.inspr }}</td>
+                    <td>{{ otherdutyStrengthCommon.silsi }}</td>
+                    <td>{{ otherdutyStrengthCommon.asilasi }}</td>
+                    <td>{{ otherdutyStrengthCommon.const }}</td>
+                    <td>{{ otherdutyStrengthCommon.lc }}</td>
+                    <td>{{ otherdutyStrengthCommon.nvf }}</td>
+                    <td>{{ otherdutyStrengthCommon.hg }}</td>
+                    <td style="border-bottom-right-radius: 10px;">{{ otherdutyStrengthCommon.civic }}</td>
+                  </tr>
+                </tbody>
+              </table>
+  
+              <h5 style="text-align: center; font-weight: bold; margin: 20px 0;">Preventive Cases of {{selectedGRPS}}</h5>
+  
+              <table class="table table-bordered" id="tableOtherDetails">
+                <thead>
+                  <tr>
+                    <th scope="col" style="border-top-left-radius: 10px; border: solid 1px #fff;">GRP Dist.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">U/S 170 BNSS</th>
+                    <th scope="col">U/S 35 BNSS R/W 303(2) / 317(2) BNS</th>
+                    <th scope="col">U/S 35 / 128 BNSS</th>
+                    <th scope="col">U/S 39 BNS/192 BNSS</th>
+                    <th scope="col">U/S 34 Police. Act.</th>
+                    <th scope="col">U/S 39 BNSS / 292 BNS</th>
+                    <th scope="col">BCLA Act.</th>
+                    <th scope="col">IR Act.</th>
+                    <th scope="col">Other</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ preventiveArrestDetailsAll.grpname }}</td>
+                    <td>{{ preventiveArrestDetailsAll.dateofIncident }}</td>
+                    <td>{{ preventiveArrestDetailsAll.act1 }}</td>
+                    <td>{{ preventiveArrestDetailsAll.act2 }}</td>
+                    <td>{{ preventiveArrestDetailsAll.act3 }}</td>
+                    <td>{{ preventiveArrestDetailsAll.act4 }}</td>
+                    <td>{{ preventiveArrestDetailsAll.policeAct }}</td>
+                    <td>{{ preventiveArrestDetailsAll.act5 }}</td>
+                    <td>{{ preventiveArrestDetailsAll.bclaact }}</td>
+                    <td>{{ preventiveArrestDetailsAll.iract }}</td>
+                    <td>{{ preventiveArrestDetailsAll.other }}</td>
+                    <td>{{ preventiveArrestDetailsAll.total }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h5 style="text-align: center; font-weight: bold; margin: 20px 0;">Arrest, Seizure, Case & Other Details of {{selectedGRPS}} GRP</h5>
+  
+              <table class="table table-bordered" id="tableOtherDetails">
+                <thead>
+                  <tr>
+                    <th scope="col" style="border-top-left-radius: 10px; border: solid 1px #fff;">GRPS</th>
+                    <th scope="col">Specif. Arrest (Persons)</th>
+                    <th scope="col">Cases on Zero FIR</th>
+                    <th scope="col">Other Cases</th>
+                    <th scope="col">Total Cases</th>
+                    <th scope="col">Type of Crime</th>
+                    <th scope="col">Seizure/Recovery</th>
+                    <th scope="col">U/D cases</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr>
+                    <td>{{ allDetailsArr.grp }}</td>
+                    <td>{{ allDetailsArr.prevCountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="allDetailsArr.prevCountToday !== '0' && allDetailsArr.prevCountToday != null" (click)="openPreviewModalPreventiveCasesAnaDetails()"></td>
+                    <td>{{ allDetailsArr.specCountToday }}</td>
+                    <td>{{ allDetailsArr.totalArrestCountToday }}</td>
+                    <td>{{ allDetailsArr.fircountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="allDetailsArr.fircountToday !== '0' && allDetailsArr.fircountToday != null" (click)="openPreviewModalFIRCasesAnaDetails()"></td>
+                    <td>{{ allDetailsArr.otherCasesToday }}</td>
+                    <td>{{ allDetailsArr.totalCasesCountToday }}</td>
+                    <td>{{ allDetailsArr.typeOfCrime }}</td>
+                    <td>{{ allDetailsArr.seizureCountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="allDetailsArr.seizureCountToday !== '0' && allDetailsArr.seizureCountToday != null" (click)="openPreviewModalSeizureAnaDetails()"></td>
+                    <td>{{ allDetailsArr.udcountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="allDetailsArr.udcountToday !== '0' && allDetailsArr.udcountToday != null" (click)="openPreviewModalUDAnaDetailsHowrah()"></td>
+                    <td>{{ allDetailsArr.grps }}</td>
+                  </tr> -->
+                  <tr *ngFor="let arr of allDetailsArrHowrahTotal">
+                    <td>{{ arr.grps }}</td>
+                    <td>{{ arr.specCountToday }}</td>
+                    <td>{{ arr.fircountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="arr.fircountToday !== '0' && arr.fircountToday != null" (click)="openPreviewModalFIRCasesAnaDetails()"></td>
+                    <td>{{ arr.otherCasesToday }}</td>
+                    <td>{{ arr.totalCasesCountToday }}</td>
+                    <td>{{ arr.typeOfCrime }}</td>
+                    <td>{{ arr.seizureCountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="arr.seizureCountToday !== '0' && arr.seizureCountToday != null" (click)="openPreviewModalSeizureAnaDetails()"></td>
+                    <td>{{ arr.udcountToday }}<img style="height: 20px; width: 20px; margin-left: 2px; margin-bottom: 3px;cursor: pointer;" src="../../../assets/information.png" *ngIf="arr.udcountToday !== '0' && arr.udcountToday != null" (click)="openPreviewModalUDAnaDetailsHowrah()"></td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>     
+
+            
+  
+      </div>
+    </div>
+</body>
+</html>

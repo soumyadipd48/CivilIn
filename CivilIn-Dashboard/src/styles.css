@@ -3,4 +3,7 @@
 @font-face {
     font-family: 'Montserrat';
     src: url(/assets/fonts/Montserrat/static/Montserrat-Regular.ttf) format("truetype");
-  }
+}
+
+/* styles.css */
+@import '~ngx-print-element/styles.css';

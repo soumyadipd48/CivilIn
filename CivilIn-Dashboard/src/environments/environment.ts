@@ -8,11 +8,11 @@ export const environment = {
     appId: '1:152879681858:web:5b48309d2cffeb630578db',
     databaseURL: 'https://civilin-aa26d-default-rtdb.firebaseio.com',
     storageBucket: 'civilin-aa26d.appspot.com',
+    locationId: 'us-central',
     apiKey: 'AIzaSyBeD6xgKo8raugyOmOQqj8GxXacDMSVdiE',
     authDomain: 'civilin-aa26d.firebaseapp.com',
     messagingSenderId: '152879681858',
     measurementId: 'G-SXFPD4W1BZ',
-    vapidKey: 'BAI_PV9Gi3e91GreAlSqfF5C3y0pkpFYYM3daaKMsv1MQY639tSz7E1cWkbhZ1G2T8Mvt0d5o9cfZNxLFrhyzQM'
   },
   production: false
 };
